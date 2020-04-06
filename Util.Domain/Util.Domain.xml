@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Util.Domain</name>
+    </assembly>
+    <members>
+        <member name="T:Util.Domain.EnumUtil">
+            <summary>
+            枚举辅助类
+            </summary>
+        </member>
+        <member name="M:Util.Domain.EnumUtil.GetEnumValue``1(System.String)">
+            <summary>
+                根据枚举描述获取枚举值
+            </summary>
+            <param name="enumType">枚举类型</param>
+            <param name="desc">枚举描述</param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Domain.EnumUtil.GetEnumValueList(System.String)">
+            <summary>
+                根据枚举名称获取枚举值和描述
+            </summary>
+            <param name="enumName">枚举名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Domain.EnumUtil.GetEnumValueList``1">
+            <summary>
+                根据枚举类型获取获取枚举值和描述
+            </summary>
+            <param name="enumType">枚举类型</param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Domain.EnumUtil.GetDescriptions(System.Enum,System.String)">
+            <summary>
+            获取位域枚举的描述，多个按分隔符组合
+            </summary>
+        </member>
+        <member name="M:Util.Domain.EnumUtil.HasValue``1(System.Object)">
+            <summary>
+            判断值是否是枚举的值
+            </summary>
+            <param name="enumType"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

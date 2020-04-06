@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Util.Extensions</AssemblyName>
+    <RootNamespace>Util.Extensions</RootNamespace>
+    <PackageId>DN.Util.Extensions</PackageId>
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>D:\Project\dotnet\Util\Util.Extensions\Util.Extensions.xml</DocumentationFile>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Util.Web</name>
+    </assembly>
+    <members>
+        <member name="P:Util.Web.TagHelpers.Easyui.DataGridTagHelper.FitColCount">
+            <summary>
+            当列数小于此数量是设置自动宽度
+            </summary>
+        </member>
+        <member name="P:Util.Web.TagHelpers.Easyui.DataGrodColTagHelper.ReplaceField">
+            <summary>
+            要替换的列的字段名
+            </summary>
+        </member>
+        <member name="P:Util.Web.TagHelpers.Easyui.FormItemTagHelper.ReplaceField">
+            <summary>
+            要替换的表单项的Name
+            </summary>
+        </member>
+        <member name="P:Util.Web.TagHelpers.Easyui.NumberboxTagHelper.Precision">
+            <summary>
+            小时位数
+            </summary>
+        </member>
+        <member name="F:Util.Web.WebConfig.GetComboboxDataFunc">
+            <summary>
+            获取下拉框数据方法
+            </summary>
+        </member>
+    </members>
+</doc>

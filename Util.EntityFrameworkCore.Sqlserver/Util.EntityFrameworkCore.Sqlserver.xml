@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Util.EntityFrameworkCore.Sqlserver</name>
+    </assembly>
+    <members>
+        <member name="M:Util.EntityFrameworkCore.Sqlserver.EntityFrameworkCoreSqlserverExtensions.IsDuplicateKeyException(Microsoft.EntityFrameworkCore.DbUpdateException)">
+            <summary>
+            是否是主键冲突异常
+            </summary>
+            <param name="ex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.EntityFrameworkCore.Sqlserver.EntityFrameworkCoreSqlserverExtensions.IsUniqueKeyException(Microsoft.EntityFrameworkCore.DbUpdateException)">
+            <summary>
+            是否唯一约束冲突一次
+            </summary>
+            <param name="ex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.EntityFrameworkCore.Sqlserver.EntityFrameworkCoreSqlserverExtensions.IsForeignKeyException(Microsoft.EntityFrameworkCore.DbUpdateException)">
+            <summary>
+            是否外键冲突
+            </summary>
+            <param name="ex"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Util.EntityFrameworkCore</name>
+    </assembly>
+    <members>
+        <member name="P:Util.EntityFrameworkCore.SqlFilter.Field">
+            <summary>
+            字段名
+            </summary>
+        </member>
+        <member name="P:Util.EntityFrameworkCore.SqlFilter.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="P:Util.EntityFrameworkCore.SqlFilter.Oper">
+            <summary>
+            运算符
+            </summary>
+        </member>
+        <member name="P:Util.EntityFrameworkCore.SqlFilter.ValueType">
+            <summary>
+            值的类型(0:string, 1:int, 2:datetime, 3:bool, 4:decimal, 5:long)
+            </summary>
+        </member>
+    </members>
+</doc>

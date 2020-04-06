@@ -1,0 +1,285 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Util.Extensions</name>
+    </assembly>
+    <members>
+        <member name="M:Util.Extensions.Extensions.ToEntity``1(System.Data.DataRow,System.Action{``0})">
+            <summary>
+            DataRow转实体对象
+            </summary>
+            <typeparam name="T">实体对象类型</typeparam>
+            <param name="dr">要转换的DataRow</param>
+            <param name="action">转换后要执行的操作</param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.ToEnumerable``1(System.Data.DataTable,System.Action{``0})">
+            <summary>
+            DataTable转IEnumerable实体
+            </summary>
+            <typeparam name="T">实体类型</typeparam>
+            <param name="dt">要转换的DataTable</param>
+            <param name="action">转换后要执行的操作</param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.ToDateTimeString(System.DateTime)">
+            <summary>
+            DateTime转string类型(格式"yyyy-MM-dd HH:mm:ss")
+            </summary>
+            <param name="dateTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.ToDateTimeString(System.Nullable{System.DateTime})">
+            <summary>
+            DateTime转string类型(格式"yyyy-MM-dd")
+            </summary>
+            <param name="dateTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.ToDateString(System.DateTime)">
+            <summary>
+            DateTime转string类型(格式"yyyy-MM-dd")
+            </summary>
+            <param name="dateTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.ToDateString(System.Nullable{System.DateTime})">
+            <summary>
+            DateTime转string类型(格式"yyyy-MM-dd")
+            </summary>
+            <param name="dateTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.GetWeekOfYear(System.DateTime)">
+              <summary> 
+             获取某一日期是该年中的第几周
+              </summary> 
+              <param name="dt"> 日期 </param> 
+              <returns> 该日期在该年中的周数 </returns> 
+        </member>
+        <member name="M:Util.Extensions.Extensions.GetMillisecond(System.DateTime)">
+            <summary>
+            获取1970年到指定时间的毫秒数
+            </summary>
+            <param name="dateTime">时间</param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.ToNumberString(System.DateTime)">
+            <summary>
+            格式化日期为(yyyyMMddHHmmssfff)
+            </summary>
+            <param name="dateTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.AddOrUpdate``2(System.Collections.Generic.IDictionary{``0,``1},``0,``1)">
+            <summary>
+                添加一个带有所提供的键和值的元素。(如果值存在,则覆盖原来的值)
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <param name="dictionary"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Util.Extensions.Extensions.GetValueTo``1(System.Collections.IDictionary,System.String)">
+            <summary>
+            将字典的值转换为某个类型
+            如果Key不存在则返回T类型的默认值
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="dictionary"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.ToDataTable``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.Dictionary{System.String,``0}})">
+            <summary>
+            字典集合转DataTable
+            </summary>
+            <typeparam name="TValue"></typeparam>
+            <param name="dictionaryList"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.JoinAsString(System.Collections.Generic.IEnumerable{System.String},System.Char,System.String,System.String)">
+            <summary>
+            把字符串拼接为以符合分割的字符串
+            </summary>
+            <param name="collection"></param>
+            <param name="separator">分割符合</param>
+            <param name="starStr">在每组开头要添加的字符串</param>
+            <param name="endStr">在每组结尾要添加的字符串</param>
+            <returns></returns>d
+        </member>
+        <member name="M:Util.Extensions.Extensions.DistinctBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+            集合去重
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="source"></param>
+            <param name="keySelector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.ToDataTable``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+                将集合类转换成DataTable
+            </summary>
+            <param name="list">集合</param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.GetInnerException(System.Exception)">
+            <summary>
+            获取异常的内部异常详细信息
+            </summary>
+            <param name="exception">异常类</param>
+            <returns>异常详细信息</returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.GetInnerExceptionMessage(System.Exception)">
+            <summary>
+            获取内部异常的错误信息
+            </summary>
+            <param name="exception"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.Or``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            拼接 OR 条件
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="exp"></param>
+            <param name="condition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.And``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            拼接And条件
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="exp"></param>
+            <param name="condition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.AddIfNotNull``1(System.Collections.Generic.ICollection{``0},``0)">
+            <summary>
+            将对象添加到 <see cref="T:System.Collections.Generic.List`1" /> 的结尾处。
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="list"></param>
+            <param name="value">要添加到 <see cref="T:System.Collections.Generic.List`1" /> 末尾的对象。 如果值为 null则不添加。</param>
+        </member>
+        <member name="M:Util.Extensions.Extensions.ToRund(System.Double,System.Int32)">
+            <summary>将双精度浮点值按指定的小数位数(四舍五入)。</summary>
+            <param name="value">要舍入的双精度浮点数。</param>
+            <param name="digits">返回值中的小数数字。</param>
+            <returns>最接近 <paramref name="value" /> 的 <paramref name="digits" /> 位小数的数字。</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="digits" /> 为小于 0 或大于 15。(默认为2)</exception>
+        </member>
+        <member name="M:Util.Extensions.Extensions.Division(System.Double,System.Double,System.Double,System.Int32)">
+            <summary>
+            除法运算(当分子为0时返回0)
+            </summary>
+            <param name="denominator">分母</param>
+            <param name="numerator">分子</param>
+            <param name="defaultValue">当分子为0是的返回默认值</param>
+            <param name="digits">保留位数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.IsDefined(System.Reflection.PropertyInfo,System.Type)">
+            <summary>
+              确定是否将任何自定义特性应用于类型的成员。
+               参数指定要搜索的成员和自定义特性的类型。
+            </summary>
+            <param name="property">属性</param>
+            <param name="attributeType">特性类型</param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.ToDateTime(System.String,System.String)">
+            <summary>
+            字符串转日期类型
+            </summary>
+            <param name="date"></param>
+            <param name="formatStr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.ToDateTime(System.String,System.DateTime,System.String)">
+            <summary>
+            字符串转日期类型
+            </summary>
+            <param name="date"></param>
+            <param name="errorDate">转换失败时返回的值</param>
+            <param name="formatStr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.AddToList``1(System.String,``0)">
+            <summary>
+            添加字符串到集合,并返回值
+            </summary>
+            <typeparam name="T">集合类型</typeparam>
+            <param name="value">值</param>
+            <param name="list">集合</param>
+            <returns>当前值</returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.TrimFirst(System.String,System.String)">
+            <summary>
+            去掉开头字符串,如果字符存在
+            </summary>
+            <param name="value"></param>
+            <param name="charper">要去掉的字符</param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.TrimLast(System.String,System.String)">
+            <summary>
+            去掉结尾字符串,如果字符存在
+            </summary>
+            <param name="value"></param>
+            <param name="charper">要去掉的字符</param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.GetCenterValue(System.String,System.String,System.String)">
+            <summary>
+            获取2个字符中间的字符串
+            </summary>
+            <param name="str">字符串</param>
+            <param name="star">开头字符</param>
+            <param name="end">结尾字符</param>
+            <returns></returns> 
+        </member>
+        <member name="M:Util.Extensions.Extensions.GetDescription(System.Type)">
+            <summary>
+            获取类型的Description,  没有返回类名
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.GetDisplayName(System.Type)">
+            <summary>
+            获取类型的DisplayName,  没有返回类名
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.GetValueType(System.Type)">
+            <summary>
+            获取值类型(只有Nullable类型有效)
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.IsNumberType(System.Type)">
+            <summary>
+            是否数字类型
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Extensions.Extensions.IsValueType(System.Type)">
+            <summary>
+            是否是值类型, 包含string类型
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
