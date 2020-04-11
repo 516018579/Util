@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Util.Application.Attributes.Format
+namespace Util.Web.Attributes.Format
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class DateFormatAttribute : Attribute

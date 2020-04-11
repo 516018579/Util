@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Util.Application.Attributes.Easyui
+namespace Util.Web.Attributes.Control
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class ColOptionAttribute : Attribute

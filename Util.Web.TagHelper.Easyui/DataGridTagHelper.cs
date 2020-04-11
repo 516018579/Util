@@ -11,6 +11,10 @@ using Util.Domain;
 using Util.Domain.Entities;
 using Util.Extensions;
 using Util.Json;
+using ColHideAttribute = Util.Web.Attributes.Control.ColHideAttribute;
+using ComboboxAttribute = Util.Web.Attributes.Control.ComboboxAttribute;
+using FrozenColAttribute = Util.Web.Attributes.Control.FrozenColAttribute;
+using IsAbleFormatAttribute = Util.Web.Attributes.Format.IsAbleFormatAttribute;
 
 namespace Util.Web.TagHelpers.Easyui
 {

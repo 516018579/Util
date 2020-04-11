@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Util.Application.Attributes.Excel
+namespace Util.Web.Attributes.Excel
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class ShowIdAttribute : Attribute

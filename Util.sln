@@ -9,15 +9,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.EntityFrameworkCore.Sq
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.EntityFrameworkCore", "Util.EntityFrameworkCore\Util.EntityFrameworkCore.csproj", "{5F7C7B48-C9F1-47A8-A489-4F23E70BA10F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Domain", "Util.Domain\Util.Domain.csproj", "{E913DDBC-7B66-4ACA-92DE-4A953EBE9C39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.Domain", "Util.Domain\Util.Domain.csproj", "{E913DDBC-7B66-4ACA-92DE-4A953EBE9C39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Web", "Util.Web\Util.Web.csproj", "{EB081E20-1295-4A7C-ADD1-7EECA01F6FAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.Web", "Util.Web\Util.Web.csproj", "{EB081E20-1295-4A7C-ADD1-7EECA01F6FAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Json", "Util.Json\Util.Json.csproj", "{D70894A7-1B06-4B4D-8CD5-01E49A031DB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.Json", "Util.Json\Util.Json.csproj", "{D70894A7-1B06-4B4D-8CD5-01E49A031DB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Application", "Util.Application\Util.Application.csproj", "{C2A926E1-5465-4F41-B633-59757DD5E461}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.Application", "Util.Application\Util.Application.csproj", "{C2A926E1-5465-4F41-B633-59757DD5E461}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.AutoMapper", "Util.AutoMapper\Util.AutoMapper.csproj", "{BD0D20AB-8492-401D-8A95-740D550F44E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.AutoMapper", "Util.AutoMapper\Util.AutoMapper.csproj", "{BD0D20AB-8492-401D-8A95-740D550F44E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Web.TagHelper", "Util.Web.TagHelper\Util.Web.TagHelper.csproj", "{D4099652-37D8-42F2-AAFE-D032C5B267B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Web.TagHelper.Easyui", "Util.Web.TagHelper.Easyui\Util.Web.TagHelper.Easyui.csproj", "{4F4C64FA-66F8-4B14-B484-1FB6EEC7BD85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +61,14 @@ Global
 		{BD0D20AB-8492-401D-8A95-740D550F44E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD0D20AB-8492-401D-8A95-740D550F44E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD0D20AB-8492-401D-8A95-740D550F44E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4099652-37D8-42F2-AAFE-D032C5B267B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4099652-37D8-42F2-AAFE-D032C5B267B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4099652-37D8-42F2-AAFE-D032C5B267B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4099652-37D8-42F2-AAFE-D032C5B267B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F4C64FA-66F8-4B14-B484-1FB6EEC7BD85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F4C64FA-66F8-4B14-B484-1FB6EEC7BD85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F4C64FA-66F8-4B14-B484-1FB6EEC7BD85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F4C64FA-66F8-4B14-B484-1FB6EEC7BD85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

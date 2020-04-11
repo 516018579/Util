@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Util.Web
+namespace Util.Web.TagHelpers
 {
-    public class WebConfig
+    public class TagHelperConfig
     {
         /// <summary>
         /// 获取下拉框数据方法

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Util.Web.TagHelper</name>
+    </assembly>
+    <members>
+        <member name="F:Util.Web.TagHelpers.TagHelperConfig.GetComboboxDataFunc">
+            <summary>
+            获取下拉框数据方法
+            </summary>
+        </member>
+    </members>
+</doc>

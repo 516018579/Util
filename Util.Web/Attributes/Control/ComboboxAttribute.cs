@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
-namespace Util.Application.Attributes.Easyui
+namespace Util.Web.Attributes.Control
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class ComboboxAttribute : Attribute

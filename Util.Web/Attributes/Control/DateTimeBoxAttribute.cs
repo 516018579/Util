@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Util.Application.Attributes.Easyui
+namespace Util.Web.Attributes.Control
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class DateTimeBoxAttribute : Attribute
