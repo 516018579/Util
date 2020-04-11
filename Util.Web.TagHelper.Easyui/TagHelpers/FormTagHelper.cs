@@ -15,10 +15,10 @@ using Util.Json;
 using Util.Web.Attributes.Control;
 using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelper.Easyui
+namespace Util.Web.TagHelpers.Easyui
 {
-    [HtmlTargetElement("eu-form")]
-    public class FormTagHelper : ModelTagHelper
+    [HtmlTargetElement("easyui-form")]
+    public class FormTagHelper : EasyuiModelTagHelper
     {
         protected override string ClassName => "";
         protected override string TagName => "form";
@@ -38,7 +38,7 @@ namespace Util.Web.TagHelper.Easyui
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
 
-            if (HasModel)
+            if (ModelTagHelper.HasModel)
             {
                 var table = new StringBuilder($"<table cellpadding={CellPadding}>");
 
@@ -143,7 +143,7 @@ namespace Util.Web.TagHelper.Easyui
         {
             var remarkName = nameof(IHasRemark.Remark);
             var index = 0;
-            foreach (var property in PropertyInfos)
+            foreach (var property in ModelTagHelper.PropertyInfos)
             {
                 var name = property.Name;
                 var isId = name == nameof(WebConsts.Id);
@@ -160,7 +160,7 @@ namespace Util.Web.TagHelper.Easyui
                     _hideItems.Add(property.Name);
                     continue;
                 }
-                if (name == remarkName && IsRemarkType)
+                if (name == remarkName && ModelTagHelper.IsRemarkType)
                 {
                     var remarkTag = new TextboxTagHelper();
                     remarkTag.IsMultiline = true;
@@ -175,7 +175,7 @@ namespace Util.Web.TagHelper.Easyui
                 var valueType = propertyType.GetValueType();
                 var isNullType = propertyType.IsNullableType();
                 var isValueType = propertyType.IsValueType && !isNullType;
-                var isName = IsNameType && name == nameof(IHasName.Name);
+                var isName = ModelTagHelper.IsNameType && name == nameof(IHasName.Name);
                 var attributes = property.GetCustomAttributes(true);
                 var isDisable = GetAttribute<DisableAttribute>(attributes) != null;
                 var colNameAttr = GetAttribute<DisplayNameAttribute>(attributes);

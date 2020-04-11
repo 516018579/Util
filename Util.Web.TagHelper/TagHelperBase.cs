@@ -1,15 +1,123 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
+using Util.Json;
 
 namespace Util.Web.TagHelpers
 {
-    public class BaseTagHelper : TagHelper
+    public abstract class TagHelperBase : TagHelper
     {
+        protected abstract string ClassName { get; }
+        protected abstract string TagName { get; }
+        protected virtual bool HasChild { get; } = true;
+
+        public HashSet<string> Class = new HashSet<string>();
+
+        /// <summary>
+        /// 配置属性名
+        /// </summary>
+        protected virtual string OptionName { get; }
+
+        /// <summary>
+        /// 配置属性分割符(默认逗号)
+        /// </summary>
+        protected virtual string OptionSeparator => ",";
+
+        /// <summary>
+        /// 配置属性的属性名和值的分割符(默认冒号)
+        /// </summary>
+        protected virtual string AttributeSeparator => ":";
+
+        protected readonly Dictionary<string, object> Options = new Dictionary<string, object>();
+
+        protected string Option => Options.Select(x =>
+        {
+            var value = x.Value.ToString();
+            if (!(x.Value is string))
+            {
+                value = value.ToCamelCase();
+            }
+            return $"{x.Key}:{value}";
+        }).JoinAsString();
+
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        {
+            InitOption(context, output);
+
+            output.TagName = TagName;
+            output.AddClass(ClassName, HtmlEncoder.Default);
+
+            foreach (var item in Class)
+            {
+                output.AddClass(item, HtmlEncoder.Default);
+            }
+
+            if (HasChild)
+            {
+                //添加默认内容
+                var content = await output.GetChildContentAsync();
+                output.Content.AppendHtml(content);
+            }
+
+            await base.ProcessAsync(context, output);
+        }
+
+        protected virtual void GetOption(TagHelperContext context, TagHelperOutput output)
+        {
+            if (OptionName != null)
+            {
+                var option = context.AllAttributes[OptionName].Value?.ToString();
+                if (option.IsNotNullOrWhiteSpace())
+                {
+                    foreach (var x in option.Split(OptionSeparator))
+                    {
+                        var items = x.Split(AttributeSeparator);
+                        Options.AddOrUpdate(items[0], items[1]);
+                    }
+                }
+            }
+
+        }
+
+        protected virtual void AddOption(TagHelperContext context, TagHelperOutput output)
+        {
+
+        }
+
+
+        protected virtual void InitOption(TagHelperContext context, TagHelperOutput output)
+        {
+            var hasOption = context.AllAttributes.ContainsName(OptionName);
+
+            if (hasOption)
+            {
+                GetOption(context, output);
+            }
+
+            AddOption(context, output);
+
+            if (Options.Any())
+            {
+                var html = new HtmlString(Option.Replace("\"", "'"));
+                if (hasOption)
+                {
+                    output.Attributes.SetAttribute(OptionName, html);
+                }
+                else
+                {
+                    output.Attributes.Add(OptionName, html);
+                }
+            }
+        }
+
         protected TagHelperOutput CreateTagHelperOutput()
         {
             return new TagHelperOutput(
@@ -42,9 +150,25 @@ namespace Util.Web.TagHelpers
             return builder.ToString();
         }
 
-        public string HmlTrim(string html)
+        /// <summary>
+        /// 去除前后换行符
+        /// </summary>
+        /// <param name="html"></param>
+        /// <returns></returns>
+        public string HtmlTrim(string html)
         {
             return html.Trim().TrimAll("\n", "\r");
+        }
+
+        /// <summary>
+        /// 在字符串开头和结尾添加符号
+        /// </summary>
+        /// <param name="value">字符串</param>
+        /// <param name="symbol">符号</param>
+        /// <returns></returns>
+        public string GetString(string value, string symbol = "'")
+        {
+            return $"{symbol}{value}{symbol}";
         }
 
         public static IHtmlDocument ParseHtml(string html, bool hasBody = false)

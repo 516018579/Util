@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
 
-namespace Util.Web.TagHelper.Easyui
+namespace Util.Web.TagHelpers.Easyui
 {
-    [HtmlTargetElement("numberbox")]
+    [HtmlTargetElement("easyui-numberbox")]
     public class NumberboxTagHelper : TextboxTagHelper
     {
         protected override string ClassName => "easyui-numberbox";

@@ -4,25 +4,29 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Util.Domain.Entities;
-using Util.Web.TagHelper.Easyui;
 
-namespace Util.Web.TagHelpers.Easyui
+namespace Util.Web.TagHelpers
 {
-    public abstract class ModelTagHelper : EasyuiTagHelper
+    public class ModelTagHelper
     {
         private static readonly ConcurrentDictionary<Type, PropertyInfo[]> ModelTypes = new ConcurrentDictionary<Type, PropertyInfo[]>();
         private static readonly ConcurrentDictionary<Type, bool> RemarkTypes = new ConcurrentDictionary<Type, bool>();
         private static readonly ConcurrentDictionary<Type, bool> NameTypes = new ConcurrentDictionary<Type, bool>();
         private static readonly ConcurrentDictionary<Type, bool> SortTypes = new ConcurrentDictionary<Type, bool>();
 
-        public Type ModelType { get; set; }
+        public readonly Type ModelType;
 
-        protected bool HasModel => ModelType != null;
-        protected bool IsNameType => NameTypes.GetOrAdd(ModelType, IsAssignableFrom<IHasName>());
-        protected bool IsRemarkType => RemarkTypes.GetOrAdd(ModelType, IsAssignableFrom<IHasRemark>());
-        protected bool IsSortType => SortTypes.GetOrAdd(ModelType, IsAssignableFrom<IHasSort>());
+        public ModelTagHelper(Type modelType = null)
+        {
+            ModelType = modelType;
+        }
 
-        protected PropertyInfo[] PropertyInfos
+        public bool HasModel => ModelType != null;
+        public bool IsNameType => NameTypes.GetOrAdd(ModelType, IsAssignableFrom<IHasName>());
+        public bool IsRemarkType => RemarkTypes.GetOrAdd(ModelType, IsAssignableFrom<IHasRemark>());
+        public bool IsSortType => SortTypes.GetOrAdd(ModelType, IsAssignableFrom<IHasSort>());
+
+        public PropertyInfo[] PropertyInfos
         {
             get
             {
@@ -33,7 +37,7 @@ namespace Util.Web.TagHelpers.Easyui
 
         }
 
-        protected bool IsAssignableFrom<T>()
+        private bool IsAssignableFrom<T>()
         {
             return typeof(T).IsAssignableFrom(ModelType);
         }

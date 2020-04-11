@@ -116,7 +116,17 @@ namespace Util.Extensions
         {
             if (length > value.Length)
                 length = value.Length;
-            return value.IsNotNullOrWhiteSpace() ? value : value.Substring(value.Length - length, length);
+            return value.ToString(null).IsNotNullOrWhiteSpace() ? value : value.Substring(value.Length - length, length);
+        }
+
+        public static bool IsNotNullOrWhiteSpace(this string value)
+        {
+            return !string.IsNullOrWhiteSpace(value);
+        }
+
+        public static bool IsNullOrWhiteSpace(this string value)
+        {
+            return string.IsNullOrWhiteSpace(value);
         }
 
         public static bool IsNumber(this string number)

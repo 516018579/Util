@@ -4,6 +4,36 @@
         <name>Util.Web.TagHelper</name>
     </assembly>
     <members>
+        <member name="P:Util.Web.TagHelpers.TagHelperBase.OptionName">
+            <summary>
+            配置属性名
+            </summary>
+        </member>
+        <member name="P:Util.Web.TagHelpers.TagHelperBase.OptionSeparator">
+            <summary>
+            配置属性分割符(默认逗号)
+            </summary>
+        </member>
+        <member name="P:Util.Web.TagHelpers.TagHelperBase.AttributeSeparator">
+            <summary>
+            配置属性的属性名和值的分割符(默认冒号)
+            </summary>
+        </member>
+        <member name="M:Util.Web.TagHelpers.TagHelperBase.HtmlTrim(System.String)">
+            <summary>
+            去除前后换行符
+            </summary>
+            <param name="html"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Web.TagHelpers.TagHelperBase.GetString(System.String,System.String)">
+            <summary>
+            在字符串开头和结尾添加符号
+            </summary>
+            <param name="value">字符串</param>
+            <param name="symbol">符号</param>
+            <returns></returns>
+        </member>
         <member name="F:Util.Web.TagHelpers.TagHelperConfig.GetComboboxDataFunc">
             <summary>
             获取下拉框数据方法

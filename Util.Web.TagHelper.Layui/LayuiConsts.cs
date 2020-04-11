@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Util.Web.TagHelpers.Easyui
+namespace Util.Web.TagHelpers.Layui
 {
-    public class EasyuiConsts
+    public class LayuiConsts
     {
         public const string Url = "url";
         public const string Data = "data";
         public const string QueryParams = "queryParams";
 
 
-        public const string Option = "data-options";
+        public const string Option = "lay-data";
         public const string Required = "required";
         public const string Editable = "editable";
         public const string Multiline = "multiline";
@@ -20,7 +20,7 @@ namespace Util.Web.TagHelpers.Easyui
         public const string Iconcls = "iconcls";
         public const string Clear = "clear";
 
-        public const string ValidType = "validType";
+        public const string ValidAttrName = "lay-verify";
         public const string ValidType_MaxLength = "maxLength";
         public const string ValidType_Max = "max";
         public const string ValidType_Min = "min";
@@ -44,13 +44,15 @@ namespace Util.Web.TagHelpers.Easyui
         public const string Title = "title";
         public const string Width = "width";
 
-        public const string Grid_Col_Formatter = "formatter";
-        public const string Grid_Col_Sortable = "sortable";
+        public const string Grid_Col_Formatter = "templet";
+        public const string Grid_Col_Toolbar = "toolbar";
+        public const string Grid_Col_Sortable = "sort";
         public const string Grid_Col_Align = "align";
-        public const string Grid_Col_Styler = "styler";
+        public const string Grid_Col_Style = "style";
         public const string Grid_Col_Editor = "editor";
         public const string Grid_Col_IsFrozen = "frozen";
-        public const string Grid_Col_IsEdit = "edit";
+        public const string Grid_Col_Edit = "edit";
+        public const string Grid_Col_Fixed = "fixed";
 
         public const string Dialog_Closed = "closed";
         public const string Dialog_Buttons = "buttons";

@@ -7,14 +7,16 @@ namespace Util.Extensions
 {
     public static partial class Extensions
     {
-        public static bool IsNullOrWhiteSpace(this object value)
+        public static string ToString(this object value, string errorValue)
         {
-            return value == null || string.IsNullOrWhiteSpace(value.ToString());
-        }
-
-        public static bool IsNotNullOrWhiteSpace(this object value)
-        {
-            return !value.IsNullOrWhiteSpace();
+            try
+            {
+                return value.ToString();
+            }
+            catch (Exception e)
+            {
+                return errorValue;
+            }
         }
 
         public static T To<T>(this object obj, T defaultValue = default(T), bool catchError = true)
@@ -32,7 +34,7 @@ namespace Util.Extensions
                 {
                     if (Enum.IsDefined(typeof(T), obj))
                     {
-                        value = (T)Enum.Parse(typeof(T), obj.ToString());
+                        value = (T)Enum.Parse(typeof(T), obj.ToString(), true);
                     }
                     else
                     {

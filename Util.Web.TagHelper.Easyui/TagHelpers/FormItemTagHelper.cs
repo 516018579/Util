@@ -6,9 +6,9 @@ using Util.Extensions;
 using Util.Json;
 using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelper.Easyui
+namespace Util.Web.TagHelpers.Easyui
 {
-    [HtmlTargetElement("eu-form-item")]
+    [HtmlTargetElement("easyui-form-item")]
     public class FormItemTagHelper : EasyuiTagHelper
     {
         protected override string ClassName => "";

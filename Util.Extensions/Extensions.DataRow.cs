@@ -27,7 +27,7 @@ namespace Util.Extensions
                     {
                         var type = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
                         var value = dr[column.ColumnName];
-                        object safeValue = value.IsNullOrWhiteSpace() ? null : Convert.ChangeType(value, type);//类型强转，将table字段类型转为集合字段类型
+                        object safeValue = value.ToString(null).IsNullOrWhiteSpace() ? null : Convert.ChangeType(value, type);//类型强转，将table字段类型转为集合字段类型
                         property.SetValue(entity, safeValue, null);
                     }
                 }

@@ -3,12 +3,11 @@ using AngleSharp.Html.Parser;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
 using Util.Json;
-using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelper.Easyui
+namespace Util.Web.TagHelpers.Easyui
 {
-    [HtmlTargetElement("datagrid-col")]
-    public class DataGrodColTagHelper : EasyuiTagHelper
+    [HtmlTargetElement("easyui-datagrid-column")]
+    public class DataGrodColumnTagHelper : EasyuiTagHelper
     {
         protected override string ClassName => "";
         protected override string TagName => "th";
@@ -57,9 +56,9 @@ namespace Util.Web.TagHelper.Easyui
             return base.ProcessAsync(context, output);
         }
 
-        public static DataGrodColTagHelper Create(string html)
+        public static DataGrodColumnTagHelper Create(string html)
         {
-            var col = new DataGrodColTagHelper();
+            var col = new DataGrodColumnTagHelper();
 
 
             var th = new HtmlParser().ParseDocument($"<html> <head> </head> <body> <table> <thead>{html} </thead> </table> </body> </html>").QuerySelector("th");

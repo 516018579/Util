@@ -7,12 +7,11 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
 using Util.Json;
-using Util.Web.TagHelpers;
 
-namespace Util.Web.TagHelpers.Easyui
+namespace Util.Web.TagHelpers.Layui
 {
-    public abstract class EasyuiTagHelper : TagHelperBase
+    public abstract class LayuiTagHelper : TagHelperBase
     {
-        protected override string OptionName => EasyuiConsts.Option;
+        protected override string OptionName =>LayuiConsts.Option;
     }
 }

@@ -5,9 +5,9 @@ using Util.Extensions;
 using Util.Json;
 using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelper.Easyui
+namespace Util.Web.TagHelpers.Easyui
 {
-    [HtmlTargetElement("dialog")]
+    [HtmlTargetElement("easyui-dialog")]
     public class DialogTagHelper : EasyuiTagHelper
     {
         protected override string ClassName => "easyui-dialog";

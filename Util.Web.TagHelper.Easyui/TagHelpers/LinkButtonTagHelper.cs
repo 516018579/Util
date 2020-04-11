@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
 using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelper.Easyui
+namespace Util.Web.TagHelpers.Easyui
 {
-    [HtmlTargetElement("linkbutton")]
+    [HtmlTargetElement("easyui-linkbutton")]
     public class LinkButtonTagHelper : EasyuiTagHelper
     {
         protected override string ClassName => "easyui-linkbutton";

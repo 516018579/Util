@@ -8,9 +8,9 @@ using Util.Json;
 using Util.Web.TagHelpers;
 using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelper.Easyui
+namespace Util.Web.TagHelpers.Easyui
 {
-    [HtmlTargetElement("combobox")]
+    [HtmlTargetElement("easyui-combobox")]
     public class ComboboxTagHelper : TextboxTagHelper
     {
         protected override string ClassName => "easyui-combobox";

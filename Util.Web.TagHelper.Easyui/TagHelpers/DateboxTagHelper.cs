@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Util.Web.TagHelper.Easyui
+namespace Util.Web.TagHelpers.Easyui
 {
-    [HtmlTargetElement("datebox")]
+    [HtmlTargetElement("easyui-datebox")]
     public class DateboxTagHelper : TextboxTagHelper
     {
         protected override string ClassName => "easyui-datebox";

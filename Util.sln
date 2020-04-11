@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Web.TagHelper.Easyui",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Excel", "Util.Excel\Util.Excel.csproj", "{7BF5185E-469F-493B-8533-B8A0DC1A19C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Web.TagHelper.Layui", "Util.Web.TagHelper.Layui\Util.Web.TagHelper.Layui.csproj", "{ABF6A041-B490-49C5-9AED-FD51BD64EB30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{7BF5185E-469F-493B-8533-B8A0DC1A19C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BF5185E-469F-493B-8533-B8A0DC1A19C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BF5185E-469F-493B-8533-B8A0DC1A19C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABF6A041-B490-49C5-9AED-FD51BD64EB30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABF6A041-B490-49C5-9AED-FD51BD64EB30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABF6A041-B490-49C5-9AED-FD51BD64EB30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABF6A041-B490-49C5-9AED-FD51BD64EB30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

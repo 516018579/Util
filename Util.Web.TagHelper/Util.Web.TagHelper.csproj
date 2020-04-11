@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <RootNamespace>Util.Web.TagHelpers</RootNamespace>
     <PackageId>DN.Util.Web.TagHelper</PackageId>
+    <Version>1.0.9</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -12,9 +13,9 @@
 
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.14.0" />
-    <PackageReference Include="DN.Util.Extensions" Version="1.0.1" />
+    <PackageReference Include="DN.Util.Extensions" Version="1.0.2" />
     <PackageReference Include="DN.Util.Json" Version="1.0.0" />
-    <PackageReference Include="DN.Util.Web" Version="1.0.5" />
+    <PackageReference Include="DN.Util.Web" Version="1.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.2.0" />
   </ItemGroup>

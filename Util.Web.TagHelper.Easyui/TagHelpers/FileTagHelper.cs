@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
 
-namespace Util.Web.TagHelper.Easyui
+namespace Util.Web.TagHelpers.Easyui
 {
-    [HtmlTargetElement("filebox")]
+    [HtmlTargetElement("easyui-filebox")]
     public class FileTagHelper : TextboxTagHelper
     {
         protected override string ClassName => "easyui-filebox";

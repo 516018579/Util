@@ -5,9 +5,9 @@ using Util.Extensions;
 using Util.Json;
 using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelper.Easyui
+namespace Util.Web.TagHelpers.Easyui
 {
-    [HtmlTargetElement("textbox")]
+    [HtmlTargetElement("easyui-textbox")]
     public class TextboxTagHelper : EasyuiTagHelper
     {
         protected override string ClassName => "easyui-textbox";

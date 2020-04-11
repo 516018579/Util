@@ -11,14 +11,13 @@ using Util.Domain.Entities;
 using Util.Extensions;
 using Util.Json;
 using Util.Web.Attributes.Control;
-using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelper.Easyui
+namespace Util.Web.TagHelpers.Layui
 {
-    [HtmlTargetElement("datagrid")]
-    public class DataGridTagHelper : ModelTagHelper
+    [HtmlTargetElement("layui-datagrid")]
+    public class DataGridTagHelper : LayuiModelTagHelper
     {
-        protected override string ClassName => "easyui-datagrid";
+        protected override string ClassName => "layui-table";
         protected override string TagName => "table";
         public string PageList { get; set; } = "[20, 100, 500, 1000]";
         public int PageSize { get; set; } = 20;
@@ -38,7 +37,7 @@ namespace Util.Web.TagHelper.Easyui
         public bool Striped { get; set; } = true;
         public string ToolBar { get; set; }
         public string IdName { get; set; }
-        public int? DefaultWidth { get; set; } = 200;
+        public string DefaultWidth { get; set; }
         private int ColCount => _cols.Count;
         protected override bool HasChild => false;
 
@@ -47,39 +46,37 @@ namespace Util.Web.TagHelper.Easyui
         /// </summary>
         public int FitColCount { get; set; } = 6;
 
-        private readonly List<DataGrodColTagHelper> _cols = new List<DataGrodColTagHelper>();
+        private readonly List<DataGrodColumnTagHelper> _cols = new List<DataGrodColumnTagHelper>();
 
         protected override void AddOption(TagHelperContext context, TagHelperOutput output)
         {
-            Options.Add(EasyuiConsts.Page_List, PageList);
-            Options.Add(EasyuiConsts.Page_Size, PageSize);
-            Options.Add(EasyuiConsts.Sort_Name, SortName.ToJsonString());
-            Options.Add(EasyuiConsts.Sort_Order, SortOrder.ToJsonString());
-            Options.Add(EasyuiConsts.ShowRowNumber, ShowRowNumber);
-            Options.Add(EasyuiConsts.ShowPage, ShowPage);
-            Options.Add(EasyuiConsts.SingleSelect, SingleSelect);
-            Options.Add(EasyuiConsts.ShowHeader, ShowHeader);
-            Options.Add(EasyuiConsts.Striped, Striped);
+            Options.Add(LayuiConsts.Page_List, PageList);
+            Options.Add(LayuiConsts.Page_Size, PageSize);
+            Options.Add(LayuiConsts.Sort_Name, SortName.ToJsonString());
+            Options.Add(LayuiConsts.Sort_Order, SortOrder.ToJsonString());
+            Options.Add(LayuiConsts.ShowRowNumber, ShowRowNumber);
+            Options.Add(LayuiConsts.ShowPage, ShowPage);
+            Options.Add(LayuiConsts.SingleSelect, SingleSelect);
+            Options.Add(LayuiConsts.ShowHeader, ShowHeader);
+            Options.Add(LayuiConsts.Striped, Striped);
 
-            Options.AddIf(ToolBar.IsNotNullOrWhiteSpace(), EasyuiConsts.ToolBar, ToolBar.ToJsonString());
-            Options.AddIf(Url.IsNotNullOrWhiteSpace(), EasyuiConsts.Url, Url.ToJsonString());
-            Options.AddIf(Data.IsNotNullOrWhiteSpace(), EasyuiConsts.Data, Data);
-            Options.AddIf(QueryParams.IsNotNullOrWhiteSpace(), EasyuiConsts.QueryParams, QueryParams);
+            Options.AddIf(ToolBar.IsNotNullOrWhiteSpace(), LayuiConsts.ToolBar, ToolBar.ToJsonString());
+            Options.AddIf(Url.IsNotNullOrWhiteSpace(), LayuiConsts.Url, Url.ToJsonString());
+            Options.AddIf(Data.IsNotNullOrWhiteSpace(), LayuiConsts.Data, Data);
+            Options.AddIf(QueryParams.IsNotNullOrWhiteSpace(), LayuiConsts.QueryParams, QueryParams);
 
-            output.Attributes.Add(EasyuiConsts.Fit, Fit.ToString().ToLower());
+            output.Attributes.Add(LayuiConsts.Fit, Fit.ToString().ToLower());
 
             base.AddOption(context, output);
         }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            if (HasModel)
+            if (ModelTagHelper.HasModel)
             {
                 var table = new StringBuilder();
 
-                DefaultWidth = DefaultWidth ?? 200;
-
-                foreach (var property in PropertyInfos)
+                foreach (var property in ModelTagHelper.PropertyInfos)
                 {
                     var isId = property.Name == WebConsts.Id;
                     if (property.IsDefined(typeof(ColHideAttribute)))
@@ -89,10 +86,15 @@ namespace Util.Web.TagHelper.Easyui
                     if (isId && IdName.IsNullOrWhiteSpace())
                         continue;
 
-                    var col = new DataGrodColTagHelper();
+                    var col = new DataGrodColumnTagHelper();
 
 
-                    col.IsFrozen = property.IsDefined(typeof(FrozenColAttribute));
+                    var fixedAttr = property.GetCustomAttribute<FixedColAttribute>();
+                    if (fixedAttr?.Fixed != null)
+                    {
+                        col.Fixed = fixedAttr.Fixed.To<Fixed>();
+                    }
+
 
                     var propertyType = property.PropertyType;
                     var valueType = propertyType.GetValueType();
@@ -144,29 +146,27 @@ namespace Util.Web.TagHelper.Easyui
                         if (col.Formatter.IsNullOrWhiteSpace())
                             col.Formatter = $"function(value, rowData, rowIndex) {{ return getArrayText({data}, value, 'text', 'value'); }}";
 
-                        if (col.Editor.IsNullOrWhiteSpace())
-                            col.Editor = $"{{ type: 'combobox', options: {{ valueField: 'value', textField: 'text', data: {data}, required: {propertyType.IsValueType().ToString().ToLower()} }} }}";
+                        //if (col.Editor.IsNullOrWhiteSpace())
+                        //    col.Editor = $"{{ type: 'combobox', options: {{ valueField: 'value', textField: 'text', data: {data}, required: {propertyType.IsValueType().ToString().ToLower()} }} }}";
                     }
                     else
                     {
                         if (propertyType.IsNumberType())
                         {
-                            col.Editor = "numberbox";
+                            //col.Edit = "numberbox";
                         }
                         else if (valueType == typeof(DateTime))
                         {
-                            col.Editor = "datebox";
+                            //col.Edit = "datebox";
                         }
                         else
                         {
-                            col.Editor = "text";
+                            col.Edit = Edit.Text;
                         }
-
-                        col.Editor = $"'{col.Editor}'";
                     }
 
                     col.Field = property.Name;
-                    col.Width = DefaultWidth.Value;
+                    col.Width = DefaultWidth;
                     col.Sortable = IsSort;
                     col.Title = name;
 
@@ -179,38 +179,27 @@ namespace Util.Web.TagHelper.Easyui
                 {
                     var split = "</th>";
 
-                    var childs = HmlTrim(childHtml).Split(split, StringSplitOptions.RemoveEmptyEntries);
+                    var childs = HtmlTrim(childHtml).Split(split, StringSplitOptions.RemoveEmptyEntries);
 
                     foreach (var child in childs)
                     {
-                        var itemTag = DataGrodColTagHelper.Create(child + split);
+                        var itemTag = DataGrodColumnTagHelper.Create(child + split);
                         if (itemTag.ReplaceField.IsNotNullOrWhiteSpace())
                         {
                             var replaceTag = _cols.FirstOrDefault(x => x.Field.Equals(itemTag.ReplaceField, StringComparison.CurrentCultureIgnoreCase));
                             if (replaceTag != null)
                             {
                                 itemTag.Field = replaceTag.Field;
-                                if (itemTag.Title.IsNullOrWhiteSpace())
-                                    itemTag.Title = replaceTag.Title;
+                                itemTag.Width = replaceTag.Width;
+                                itemTag.Style = replaceTag.Style;
+                                itemTag.Title = replaceTag.Title;
+                                itemTag.Formatter = replaceTag.Formatter;
                                 if (!itemTag.Sort.HasValue)
                                     itemTag.Sort = replaceTag.Sort;
-                                if (itemTag.Editor.IsNullOrWhiteSpace())
+                                if (itemTag.Edit.HasValue)
                                 {
-                                    itemTag.Editor = replaceTag.Editor;
+                                    itemTag.Edit = replaceTag.Edit;
                                 }
-                                if (itemTag.Formatter.IsNullOrWhiteSpace())
-                                {
-                                    itemTag.Formatter = replaceTag.Formatter;
-                                }
-                                if (itemTag.Styler.IsNullOrWhiteSpace())
-                                {
-                                    itemTag.Styler = replaceTag.Styler;
-                                }
-                                if (itemTag.Width == 0)
-                                {
-                                    itemTag.Width = replaceTag.Width;
-                                }
-
                                 _cols.Remove(replaceTag);
                             }
                         }
@@ -225,34 +214,27 @@ namespace Util.Web.TagHelper.Easyui
                 else
                     FitColumns = FitColCount > ColCount;
 
-                Options.Add(EasyuiConsts.FitColumns, FitColumns);
+                Options.Add(LayuiConsts.FitColumns, FitColumns);
 
-                var checkBox = "<th data-options=\"field:'_ck',checkbox: true\"></th>";
+                var checkBox = $"<th {LayuiConsts.Option}=\"checkbox:true\"></th>";
 
-                var frozenCols = _cols.Where(x => x.IsFrozen).ToList();
-
-                async Task AddHead(List<DataGrodColTagHelper> cols, bool isFrozen = false)
+                async Task AddHead(List<DataGrodColumnTagHelper> cols)
                 {
-                    table.Append($"<thead {(isFrozen ? "data-options='frozen: true'" : "")}>");
-                    if (HasCheckBox && (isFrozen || (!isFrozen && !frozenCols.Any())))
+                    table.Append("<thead>");
+                    if (HasCheckBox)
                         table.Append(checkBox);
 
                     foreach (var col in cols.OrderBy(x => x.Sort))
                     {
-                        if (!col.IsEdit)
-                            col.Editor = null;
                         table.Append(await RenderInnerTagHelper(col, context, CreateTagHelperOutput()));
                     }
 
                     table.Append("</thead>");
                 }
 
-                if (frozenCols.Any())
-                {
-                    await AddHead(frozenCols, true);
-                }
 
-                await AddHead(_cols.Where(x => !x.IsFrozen).ToList());
+
+                await AddHead(_cols.ToList());
 
                 output.Content.SetHtmlContent(table.ToString());
             }
