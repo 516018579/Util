@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
-using Util.Web;
 using Util.Json;
+using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelpers.Easyui
+namespace Util.Web.TagHelper.Easyui
 {
     [HtmlTargetElement("dialog")]
     public class DialogTagHelper : EasyuiTagHelper
@@ -36,13 +34,13 @@ namespace Util.Web.TagHelpers.Easyui
 
             buttons.Append("]");
 
-            Options.AddIf(OnClose.IsNotNullOrWhiteSpace(), WebConsts.Easyui.Dialog_OnClose, $"function(){{ {OnClose} }}");
+            Options.AddIf(OnClose.IsNotNullOrWhiteSpace(), EasyuiConsts.Dialog_OnClose, $"function(){{ {OnClose} }}");
 
-            Options.AddIf(IsMax, WebConsts.Easyui.Dialog_IsMax, IsMax);
+            Options.AddIf(IsMax, EasyuiConsts.Dialog_IsMax, IsMax);
 
-            Options.Add(WebConsts.Easyui.Dialog_Buttons, buttons.ToString());
+            Options.Add(EasyuiConsts.Dialog_Buttons, buttons.ToString());
 
-            output.Attributes.Add(WebConsts.Easyui.Dialog_Closed, Closed.ToString().ToCamelCase());
+            output.Attributes.Add(EasyuiConsts.Dialog_Closed, Closed.ToString().ToCamelCase());
 
             if (Closed)
             {

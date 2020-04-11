@@ -1,22 +1,19 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Util.Application.Attributes.Easyui;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Application.Attributes.Format;
 using Util.Domain;
 using Util.Domain.Entities;
 using Util.Extensions;
 using Util.Json;
-using ColHideAttribute = Util.Web.Attributes.Control.ColHideAttribute;
-using ComboboxAttribute = Util.Web.Attributes.Control.ComboboxAttribute;
-using FrozenColAttribute = Util.Web.Attributes.Control.FrozenColAttribute;
-using IsAbleFormatAttribute = Util.Web.Attributes.Format.IsAbleFormatAttribute;
+using Util.Web.Attributes.Control;
+using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelpers.Easyui
+namespace Util.Web.TagHelper.Easyui
 {
     [HtmlTargetElement("datagrid")]
     public class DataGridTagHelper : ModelTagHelper
@@ -54,22 +51,22 @@ namespace Util.Web.TagHelpers.Easyui
 
         protected override void AddOption(TagHelperContext context, TagHelperOutput output)
         {
-            Options.Add(WebConsts.Easyui.Page_List, PageList);
-            Options.Add(WebConsts.Easyui.Page_Size, PageSize);
-            Options.Add(WebConsts.Easyui.Sort_Name, SortName.ToJsonString());
-            Options.Add(WebConsts.Easyui.Sort_Order, SortOrder.ToJsonString());
-            Options.Add(WebConsts.Easyui.ShowRowNumber, ShowRowNumber);
-            Options.Add(WebConsts.Easyui.ShowPage, ShowPage);
-            Options.Add(WebConsts.Easyui.SingleSelect, SingleSelect);
-            Options.Add(WebConsts.Easyui.ShowHeader, ShowHeader);
-            Options.Add(WebConsts.Easyui.Striped, Striped);
+            Options.Add(EasyuiConsts.Page_List, PageList);
+            Options.Add(EasyuiConsts.Page_Size, PageSize);
+            Options.Add(EasyuiConsts.Sort_Name, SortName.ToJsonString());
+            Options.Add(EasyuiConsts.Sort_Order, SortOrder.ToJsonString());
+            Options.Add(EasyuiConsts.ShowRowNumber, ShowRowNumber);
+            Options.Add(EasyuiConsts.ShowPage, ShowPage);
+            Options.Add(EasyuiConsts.SingleSelect, SingleSelect);
+            Options.Add(EasyuiConsts.ShowHeader, ShowHeader);
+            Options.Add(EasyuiConsts.Striped, Striped);
 
-            Options.AddIf(ToolBar.IsNotNullOrWhiteSpace(), WebConsts.Easyui.ToolBar, ToolBar.ToJsonString());
-            Options.AddIf(Url.IsNotNullOrWhiteSpace(), WebConsts.Easyui.Url, Url.ToJsonString());
-            Options.AddIf(Data.IsNotNullOrWhiteSpace(), WebConsts.Easyui.Data, Data);
-            Options.AddIf(QueryParams.IsNotNullOrWhiteSpace(), WebConsts.Easyui.QueryParams, QueryParams);
+            Options.AddIf(ToolBar.IsNotNullOrWhiteSpace(), EasyuiConsts.ToolBar, ToolBar.ToJsonString());
+            Options.AddIf(Url.IsNotNullOrWhiteSpace(), EasyuiConsts.Url, Url.ToJsonString());
+            Options.AddIf(Data.IsNotNullOrWhiteSpace(), EasyuiConsts.Data, Data);
+            Options.AddIf(QueryParams.IsNotNullOrWhiteSpace(), EasyuiConsts.QueryParams, QueryParams);
 
-            output.Attributes.Add(WebConsts.Easyui.Fit, Fit.ToString().ToLower());
+            output.Attributes.Add(EasyuiConsts.Fit, Fit.ToString().ToLower());
 
             base.AddOption(context, output);
         }
@@ -133,9 +130,7 @@ namespace Util.Web.TagHelpers.Easyui
                         string data;
                         if (isBool)
                         {
-                            data = (property.GetCustomAttribute<IsAbleFormatAttribute>() != null
-                                    ? EnumUtil.IsAbleDictionary
-                                    : EnumUtil.BoolDictionary).Select(x => new { value = x.Key, text = x.Value })
+                            data = EnumUtil.BoolDictionary.Select(x => new { value = x.Key, text = x.Value })
                                 .ToJsonString(true);
                         }
                         else
@@ -230,7 +225,7 @@ namespace Util.Web.TagHelpers.Easyui
                 else
                     FitColumns = FitColCount > ColCount;
 
-                Options.Add(WebConsts.Easyui.FitColumns, FitColumns);
+                Options.Add(EasyuiConsts.FitColumns, FitColumns);
 
                 var checkBox = "<th data-options=\"field:'_ck',checkbox: true\"></th>";
 

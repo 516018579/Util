@@ -1,21 +1,21 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Util.Application.Attributes.Easyui;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using Util.Application.Attributes.Format;
 using Util.Domain;
 using Util.Domain.Entities;
 using Util.Extensions;
 using Util.Json;
+using Util.Web.Attributes.Control;
+using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelpers.Easyui
+namespace Util.Web.TagHelper.Easyui
 {
     [HtmlTargetElement("eu-form")]
     public class FormTagHelper : ModelTagHelper
@@ -260,7 +260,7 @@ namespace Util.Web.TagHelpers.Easyui
                 }
                 else if (propertyType.IsNumberType())
                 {
-                    var precisionAttr = GetAttribute<PrecisionAttribute>(attributes);
+                    var precisionAttr = GetAttribute<NumberFormatAttribute>(attributes);
                     itemTag = new NumberboxTagHelper
                     {
                         Precision = precisionAttr?.Precision
@@ -268,7 +268,7 @@ namespace Util.Web.TagHelpers.Easyui
                 }
                 else if (valueType == typeof(DateTime))
                 {
-                    var datetimeAttr = GetAttribute<DateTimeBoxAttribute>(attributes);
+                    var datetimeAttr = GetAttribute<DateFormatAttribute>(attributes);
                     if (datetimeAttr == null)
                         itemTag = new DateboxTagHelper();
                     else

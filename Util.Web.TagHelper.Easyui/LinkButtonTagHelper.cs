@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
-using Util.Web;
+using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelpers.Easyui
+namespace Util.Web.TagHelper.Easyui
 {
     [HtmlTargetElement("linkbutton")]
     public class LinkButtonTagHelper : EasyuiTagHelper
@@ -11,9 +11,9 @@ namespace Util.Web.TagHelpers.Easyui
         protected override string ClassName => "easyui-linkbutton";
         protected override string TagName => "a";
 
-        [HtmlAttributeName(WebConsts.Easyui.Disabled)]
+        [HtmlAttributeName(EasyuiConsts.Disabled)]
         public bool? IsDisable { get; set; }
-        [HtmlAttributeName(WebConsts.Easyui.Plain)]
+        [HtmlAttributeName(EasyuiConsts.Plain)]
         public bool? IsPlain { get; set; }
 
         [HtmlAttributeName("Icon")]
@@ -21,13 +21,13 @@ namespace Util.Web.TagHelpers.Easyui
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            Options.AddIf(IsDisable.HasValue, WebConsts.Easyui.Disabled, IsDisable);
-            Options.AddIf(IsPlain.HasValue, WebConsts.Easyui.Plain, IsPlain);
+            Options.AddIf(IsDisable.HasValue, EasyuiConsts.Disabled, IsDisable);
+            Options.AddIf(IsPlain.HasValue, EasyuiConsts.Plain, IsPlain);
             output.Attributes.Add("href", "javascript:void(0)");
 
             if (Icon != IconType.None)
             {
-                output.Attributes.Add(WebConsts.Easyui.Iconcls, $"icon-{Icon.ToString().ToLower()}");
+                output.Attributes.Add(EasyuiConsts.Iconcls, $"icon-{Icon.ToString().ToLower()}");
             }
 
             await base.ProcessAsync(context, output);

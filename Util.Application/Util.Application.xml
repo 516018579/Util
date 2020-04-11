@@ -4,5 +4,25 @@
         <name>Util.Application</name>
     </assembly>
     <members>
+        <member name="P:Util.Application.Attributes.Format.DateFormatAttribute.DateFormatString">
+            <summary>
+            日期格式
+            </summary>
+        </member>
+        <member name="P:Util.Application.Attributes.Format.NumberFormatAttribute.Precision">
+            <summary>
+            小数位数
+            </summary>
+        </member>
+        <member name="P:Util.Application.Attributes.Format.NumberFormatAttribute.EndSymbol">
+            <summary>
+            结尾符号
+            </summary>
+        </member>
+        <member name="P:Util.Application.Attributes.Format.NumberFormatAttribute.CalculateType">
+            <summary>
+            计算方式
+            </summary>
+        </member>
     </members>
 </doc>

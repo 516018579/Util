@@ -1,13 +1,11 @@
-﻿using System;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
-using Util.Web;
 using Util.Json;
+using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelpers.Easyui
+namespace Util.Web.TagHelper.Easyui
 {
     [HtmlTargetElement("datagrid-col")]
     public class DataGrodColTagHelper : EasyuiTagHelper
@@ -33,22 +31,22 @@ namespace Util.Web.TagHelpers.Easyui
 
         protected override void AddOption(TagHelperContext context, TagHelperOutput output)
         {
-            Options.AddOrUpdate(WebConsts.Easyui.Grid_Col_Align, $"'{Align.ToString().ToLower()}'");
-            Options.AddIf(Field.IsNotNullOrWhiteSpace(), WebConsts.Easyui.Field, $"'{Field?.ToCamelCase()}'");
-            Options.AddIf(Title.IsNotNullOrWhiteSpace(), WebConsts.Easyui.Title, $"'{Title}'");
-            Options.AddOrUpdate(WebConsts.Easyui.Width, Width);
-            Options.AddIf(Styler.IsNotNullOrWhiteSpace(), WebConsts.Easyui.Grid_Col_Styler, Styler);
-            Options.AddIf(Formatter.IsNotNullOrWhiteSpace(), WebConsts.Easyui.Grid_Col_Formatter, Formatter);
-            Options.AddIf(Editor.IsNotNullOrWhiteSpace(), WebConsts.Easyui.Grid_Col_Editor, Editor);
+            Options.AddOrUpdate(EasyuiConsts.Grid_Col_Align, $"'{Align.ToString().ToLower()}'");
+            Options.AddIf(Field.IsNotNullOrWhiteSpace(), EasyuiConsts.Field, $"'{Field?.ToCamelCase()}'");
+            Options.AddIf(Title.IsNotNullOrWhiteSpace(), EasyuiConsts.Title, $"'{Title}'");
+            Options.AddOrUpdate(EasyuiConsts.Width, Width);
+            Options.AddIf(Styler.IsNotNullOrWhiteSpace(), EasyuiConsts.Grid_Col_Styler, Styler);
+            Options.AddIf(Formatter.IsNotNullOrWhiteSpace(), EasyuiConsts.Grid_Col_Formatter, Formatter);
+            Options.AddIf(Editor.IsNotNullOrWhiteSpace(), EasyuiConsts.Grid_Col_Editor, Editor);
 
             if (IsFrozen)
-                output.Attributes.Add(WebConsts.Easyui.Grid_Col_IsFrozen, IsFrozen);
+                output.Attributes.Add(EasyuiConsts.Grid_Col_IsFrozen, IsFrozen);
 
             if (IsEdit)
-                output.Attributes.Add(WebConsts.Easyui.Grid_Col_IsEdit, IsEdit);
+                output.Attributes.Add(EasyuiConsts.Grid_Col_IsEdit, IsEdit);
 
             if (ReplaceField.IsNotNullOrWhiteSpace())
-                output.Attributes.Add(WebConsts.Easyui.Item_Replace, ReplaceField);
+                output.Attributes.Add(EasyuiConsts.Item_Replace, ReplaceField);
 
             base.AddOption(context, output);
         }
@@ -66,7 +64,7 @@ namespace Util.Web.TagHelpers.Easyui
 
             var th = new HtmlParser().ParseDocument($"<html> <head> </head> <body> <table> <thead>{html} </thead> </table> </body> </html>").QuerySelector("th");
 
-            var option = th.GetAttribute(WebConsts.Easyui.Option);
+            var option = th.GetAttribute(EasyuiConsts.Option);
             if (option.IsNotNullOrWhiteSpace())
             {
                 foreach (var x in option.Split(','))
@@ -76,18 +74,18 @@ namespace Util.Web.TagHelpers.Easyui
                 }
             }
 
-            col.Field = col.Options.GetOrDefault(WebConsts.Easyui.Field)?.ToString();
-            col.Styler = col.Options.GetOrDefault(WebConsts.Easyui.Grid_Col_Styler)?.ToString();
-            col.Editor = col.Options.GetOrDefault(WebConsts.Easyui.Grid_Col_Editor)?.ToString();
-            col.Formatter = col.Options.GetOrDefault(WebConsts.Easyui.Grid_Col_Formatter)?.ToString();
-            col.Width = col.Options.GetOrDefault(WebConsts.Easyui.Item_Replace).To(0);
-            col.Sort = col.Options.GetOrDefault(WebConsts.Easyui.Item_Sort).ToNullable<int>();
+            col.Field = col.Options.GetOrDefault(EasyuiConsts.Field)?.ToString();
+            col.Styler = col.Options.GetOrDefault(EasyuiConsts.Grid_Col_Styler)?.ToString();
+            col.Editor = col.Options.GetOrDefault(EasyuiConsts.Grid_Col_Editor)?.ToString();
+            col.Formatter = col.Options.GetOrDefault(EasyuiConsts.Grid_Col_Formatter)?.ToString();
+            col.Width = col.Options.GetOrDefault(EasyuiConsts.Item_Replace).To(0);
+            col.Sort = col.Options.GetOrDefault(EasyuiConsts.Item_Sort).ToNullable<int>();
 
-            col.ReplaceField = th.GetAttribute(WebConsts.Easyui.Item_Replace);
-            col.IsFrozen = th.GetAttribute(WebConsts.Easyui.Grid_Col_IsFrozen).To(false);
-            col.IsEdit = th.GetAttribute(WebConsts.Easyui.Grid_Col_IsEdit).To(false);
+            col.ReplaceField = th.GetAttribute(EasyuiConsts.Item_Replace);
+            col.IsFrozen = th.GetAttribute(EasyuiConsts.Grid_Col_IsFrozen).To(false);
+            col.IsEdit = th.GetAttribute(EasyuiConsts.Grid_Col_IsEdit).To(false);
 
-            var align = col.Options.GetOrDefault(WebConsts.Easyui.Grid_Col_Align)?.ToString();
+            var align = col.Options.GetOrDefault(EasyuiConsts.Grid_Col_Align)?.ToString();
             if (align.IsNotNullOrWhiteSpace())
             {
                 switch (align)

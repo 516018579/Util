@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Util.Web.Attributes.Control
+namespace Util.Application.Attributes.Format
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class ColHideAttribute : Attribute

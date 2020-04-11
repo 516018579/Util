@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
 using Util.Json;
+using Util.Web.TagHelpers;
 
-namespace Util.Web.TagHelpers.Easyui
+namespace Util.Web.TagHelper.Easyui
 {
     public abstract class EasyuiTagHelper : BaseTagHelper
     {
@@ -54,7 +55,7 @@ namespace Util.Web.TagHelpers.Easyui
 
         protected virtual void GetOption(TagHelperContext context, TagHelperOutput output)
         {
-            var option = context.AllAttributes[WebConsts.Easyui.Option].Value?.ToString();
+            var option = context.AllAttributes[EasyuiConsts.Option].Value?.ToString();
             if (option.IsNotNullOrWhiteSpace())
             {
                 foreach (var x in option.Split(','))
@@ -73,7 +74,7 @@ namespace Util.Web.TagHelpers.Easyui
 
         protected virtual void InitOption(TagHelperContext context, TagHelperOutput output)
         {
-            var hasOption = context.AllAttributes.ContainsName(WebConsts.Easyui.Option);
+            var hasOption = context.AllAttributes.ContainsName(EasyuiConsts.Option);
 
             if (hasOption)
             {
@@ -87,11 +88,11 @@ namespace Util.Web.TagHelpers.Easyui
                 var html = new HtmlString(Option.Replace("\"", "'"));
                 if (hasOption)
                 {
-                    output.Attributes.SetAttribute(WebConsts.Easyui.Option, html);
+                    output.Attributes.SetAttribute(EasyuiConsts.Option, html);
                 }
                 else
                 {
-                    output.Attributes.Add(WebConsts.Easyui.Option, html);
+                    output.Attributes.Add(EasyuiConsts.Option, html);
                 }
             }
         }

@@ -1,13 +1,7 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Util.Extensions;
-using Util.Web;
 
-namespace Util.Web.TagHelpers.Easyui
+namespace Util.Web.TagHelper.Easyui
 {
     [HtmlTargetElement("numberbox")]
     public class NumberboxTagHelper : TextboxTagHelper
@@ -23,9 +17,9 @@ namespace Util.Web.TagHelpers.Easyui
 
         protected override void AddOption(TagHelperContext context, TagHelperOutput output)
         {
-            Options.AddIf(Max.HasValue, WebConsts.Easyui.ValidType_Max, Max);
-            Options.AddIf(Min.HasValue, WebConsts.Easyui.ValidType_Min, Min);
-            Options.AddIf(Precision.HasValue, WebConsts.Easyui.ValidType_Precision, Precision);
+            Options.AddIf(Max.HasValue, EasyuiConsts.ValidType_Max, Max);
+            Options.AddIf(Min.HasValue, EasyuiConsts.ValidType_Min, Min);
+            Options.AddIf(Precision.HasValue, EasyuiConsts.ValidType_Precision, Precision);
             base.AddOption(context, output);
         }
     }

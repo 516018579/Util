@@ -1,29 +1,27 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
 using Util.Json;
-using Util.Web;
+using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelpers.Easyui
+namespace Util.Web.TagHelper.Easyui
 {
     [HtmlTargetElement("textbox")]
     public class TextboxTagHelper : EasyuiTagHelper
     {
         protected override string ClassName => "easyui-textbox";
         protected override string TagName => "input";
-        [HtmlAttributeName(WebConsts.Easyui.Editable)]
+        [HtmlAttributeName(EasyuiConsts.Editable)]
         public virtual bool? IsEdit { get; set; }
 
-        [HtmlAttributeName(WebConsts.Easyui.Multiline)]
+        [HtmlAttributeName(EasyuiConsts.Multiline)]
         public virtual bool? IsMultiline { get; set; }
 
-        [HtmlAttributeName(WebConsts.Easyui.Disabled)]
+        [HtmlAttributeName(EasyuiConsts.Disabled)]
         public virtual bool? IsDisable { get; set; }
 
-        [HtmlAttributeName(WebConsts.Easyui.Required)]
+        [HtmlAttributeName(EasyuiConsts.Required)]
         public virtual bool? IsRequired { get; set; }
         public virtual string ValidType { get; set; }
         public virtual bool? Clear { get; set; }
@@ -33,19 +31,19 @@ namespace Util.Web.TagHelpers.Easyui
 
         protected override void AddOption(TagHelperContext context, TagHelperOutput output)
         {
-            Options.AddIf(IsRequired.HasValue, WebConsts.Easyui.Required, IsRequired);
-            Options.AddIf(IsMultiline.HasValue, WebConsts.Easyui.Multiline, IsMultiline);
-            Options.AddIf(IsDisable.HasValue, WebConsts.Easyui.Disabled, IsDisable);
-            Options.AddIf(IsEdit.HasValue, WebConsts.Easyui.Editable, IsEdit);
+            Options.AddIf(IsRequired.HasValue, EasyuiConsts.Required, IsRequired);
+            Options.AddIf(IsMultiline.HasValue, EasyuiConsts.Multiline, IsMultiline);
+            Options.AddIf(IsDisable.HasValue, EasyuiConsts.Disabled, IsDisable);
+            Options.AddIf(IsEdit.HasValue, EasyuiConsts.Editable, IsEdit);
 
             if (MaxLength > 0)
             {
-                ValidTypes.Add($"{WebConsts.Easyui.ValidType_MaxLength}[{MaxLength}]");
+                ValidTypes.Add($"{EasyuiConsts.ValidType_MaxLength}[{MaxLength}]");
             }
 
-            if (Options.ContainsKey(WebConsts.Easyui.ValidType))
+            if (Options.ContainsKey(EasyuiConsts.ValidType))
             {
-                var valids = Options[WebConsts.Easyui.ValidType].ToString().Split(',').Where(x => x.IsNotNullOrWhiteSpace());
+                var valids = Options[EasyuiConsts.ValidType].ToString().Split(',').Where(x => x.IsNotNullOrWhiteSpace());
                 ValidTypes.AddRange(valids);
             }
 
@@ -59,9 +57,9 @@ namespace Util.Web.TagHelpers.Easyui
             if (IsDisable == true)
                 Clear = false;
             if (Clear.HasValue)
-                output.Attributes.Add(WebConsts.Easyui.Clear, Clear.ToString().ToCamelCase());
+                output.Attributes.Add(EasyuiConsts.Clear, Clear.ToString().ToCamelCase());
 
-            Options.AddOrUpdate(WebConsts.Easyui.ValidType, $"'{ValidTypes.JoinAsString()}'");
+            Options.AddOrUpdate(EasyuiConsts.ValidType, $"'{ValidTypes.JoinAsString()}'");
         }
     }
 }

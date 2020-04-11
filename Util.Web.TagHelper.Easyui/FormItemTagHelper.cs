@@ -1,14 +1,12 @@
-﻿using System;
-using System.Linq;
-using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AngleSharp.Html.Parser;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
-using Util.Web;
 using Util.Json;
+using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelpers.Easyui
+namespace Util.Web.TagHelper.Easyui
 {
     [HtmlTargetElement("eu-form-item")]
     public class FormItemTagHelper : EasyuiTagHelper
@@ -66,10 +64,10 @@ namespace Util.Web.TagHelpers.Easyui
             }
 
             if (Sort.HasValue)
-                output.Attributes.Add(WebConsts.Easyui.Item_Sort, Sort);
+                output.Attributes.Add(EasyuiConsts.Item_Sort, Sort);
 
             if (ReplaceField.IsNotNullOrWhiteSpace())
-                output.Attributes.Add(WebConsts.Easyui.Item_Replace, ReplaceField);
+                output.Attributes.Add(EasyuiConsts.Item_Replace, ReplaceField);
 
             td.Append("</td>");
 
@@ -99,8 +97,8 @@ namespace Util.Web.TagHelpers.Easyui
                 }
 
                 item.ChildContent = td.InnerHtml;
-                item.Sort = tr.GetAttribute(WebConsts.Easyui.Item_Sort).ToNullable<int>();
-                item.ReplaceField = tr.GetAttribute(WebConsts.Easyui.Item_Replace);
+                item.Sort = tr.GetAttribute(EasyuiConsts.Item_Sort).ToNullable<int>();
+                item.ReplaceField = tr.GetAttribute(EasyuiConsts.Item_Replace);
             }
 
 

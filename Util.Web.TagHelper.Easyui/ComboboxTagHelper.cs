@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AngleSharp.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Domain;
 using Util.Json;
+using Util.Web.TagHelpers;
 using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelpers.Easyui
+namespace Util.Web.TagHelper.Easyui
 {
     [HtmlTargetElement("combobox")]
     public class ComboboxTagHelper : TextboxTagHelper
@@ -22,7 +22,7 @@ namespace Util.Web.TagHelpers.Easyui
         public dynamic DefaultValue { get; set; }
         [HtmlAttributeName("default-index")]
         public int? DefaultIndex { get; set; }
-        [HtmlAttributeName(WebConsts.Easyui.Editable)]
+        [HtmlAttributeName(EasyuiConsts.Editable)]
         public override bool? IsEdit { get; set; } = false;
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -39,7 +39,7 @@ namespace Util.Web.TagHelpers.Easyui
             }
             else
             {
-                list = await WebConfig.GetComboboxDataFunc(ModelType.Name);
+                list = await TagHelperConfig.GetComboboxDataFunc(ModelType.Name);
             }
 
             if (DefaultValue != null && DefaultValue is bool)

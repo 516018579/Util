@@ -14,6 +14,7 @@
     <PackageReference Include="AngleSharp" Version="0.14.0" />
     <PackageReference Include="DN.Util.Extensions" Version="1.0.1" />
     <PackageReference Include="DN.Util.Json" Version="1.0.0" />
+    <PackageReference Include="DN.Util.Web" Version="1.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.2.0" />
   </ItemGroup>
