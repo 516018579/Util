@@ -9,14 +9,9 @@
             配置属性名
             </summary>
         </member>
-        <member name="P:Util.Web.TagHelpers.TagHelperBase.OptionSeparator">
+        <member name="P:Util.Web.TagHelpers.TagHelperBase.ValueToCamelCase">
             <summary>
-            配置属性分割符(默认逗号)
-            </summary>
-        </member>
-        <member name="P:Util.Web.TagHelpers.TagHelperBase.AttributeSeparator">
-            <summary>
-            配置属性的属性名和值的分割符(默认冒号)
+            配置项的值是否采用CamelCase命名
             </summary>
         </member>
         <member name="M:Util.Web.TagHelpers.TagHelperBase.HtmlTrim(System.String)">

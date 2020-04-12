@@ -8,13 +8,14 @@ namespace Util.Web.TagHelpers.Layui
     {
         public const string Url = "url";
         public const string Data = "data";
-        public const string QueryParams = "queryParams";
+        public const string QueryParams = "where";
 
-
+       
+        public const string LaySkin = " lay-skin";
+        public const string LayText = " lay-text";
         public const string Option = "lay-data";
         public const string Required = "required";
         public const string Editable = "editable";
-        public const string Multiline = "multiline";
         public const string Disabled = "disabled";
         public const string Plain = "plain";
         public const string Iconcls = "iconcls";
@@ -28,21 +29,27 @@ namespace Util.Web.TagHelpers.Layui
 
         public const string Button_Text = "buttonText";
 
-        public const string Page_List = "pageList";
-        public const string Page_Size = "pageSize";
-        public const string Sort_Name = "sortName";
-        public const string Sort_Order = "sortOrder";
+        public const string Sort_Name = "field";
+        public const string Sort_Order = "type";
         public const string Fit = "fit";
         public const string FitColumns = "fitColumns";
-        public const string ShowRowNumber = "rownumbers";
-        public const string ShowPage = "pagination";
         public const string ShowHeader = "showHeader";
         public const string SingleSelect = "singleSelect";
-        public const string ToolBar = "toolbar";
-        public const string Striped = "striped";
+
+        public const string Striped = "even";
         public const string Field = "field";
         public const string Title = "title";
         public const string Width = "width";
+
+        public const string Grid_DefaultParam = "request";
+        public const string Grid_ParseData = "parseData";
+        public const string Grid_Size = "size";
+        public const string Grid_Skin = "skin";
+        public const string Grid_Sort = "initSort";
+        public const string Grid_ToolBar = "toolbar";
+        public const string Grid_PageSize = "limit";
+        public const string Grid_PageList = "limits";
+        public const string Gird_Page = "page";
 
         public const string Grid_Col_Formatter = "templet";
         public const string Grid_Col_Toolbar = "toolbar";
@@ -63,5 +70,10 @@ namespace Util.Web.TagHelpers.Layui
         public const string Item_Sort = "sort";
         public const string Item_Replace = "replace";
         public const string Item_Split = "<@>";
+
+        public const string Select_Filterable = "filterable";
+        public const string Select_Single = "radio";
+        public const string Select_NameField = "name";
+        public const string Select_ValueField = "value";
     }
 }

@@ -29,16 +29,22 @@ namespace Util.Web.TagHelpers.Layui
         public bool? FitColumns { get; set; }
         public bool Fit { get; set; } = true;
         public bool ShowRowNumber { get; set; } = true;
-        public bool ShowPage { get; set; } = true;
+        public bool Page { get; set; } = true;
         public bool HasCheckBox { get; set; } = true;
         public bool IsSort { get; set; } = true;
-        public bool SingleSelect { get; set; }
         public bool ShowHeader { get; set; } = true;
-        public bool Striped { get; set; } = true;
+        /// <summary>
+        /// 是否开启隔行背景
+        /// </summary>
+        public bool Striped { get; set; } = false;
         public string ToolBar { get; set; }
         public string IdName { get; set; }
         public string DefaultWidth { get; set; }
+        public Size? Size { get; set; }
+        public Skin? Skin { get; set; }
         private int ColCount => _cols.Count;
+
+
         protected override bool HasChild => false;
 
         /// <summary>
@@ -50,20 +56,22 @@ namespace Util.Web.TagHelpers.Layui
 
         protected override void AddOption(TagHelperContext context, TagHelperOutput output)
         {
-            Options.Add(LayuiConsts.Page_List, PageList);
-            Options.Add(LayuiConsts.Page_Size, PageSize);
-            Options.Add(LayuiConsts.Sort_Name, SortName.ToJsonString());
-            Options.Add(LayuiConsts.Sort_Order, SortOrder.ToJsonString());
-            Options.Add(LayuiConsts.ShowRowNumber, ShowRowNumber);
-            Options.Add(LayuiConsts.ShowPage, ShowPage);
-            Options.Add(LayuiConsts.SingleSelect, SingleSelect);
+            Options.Add(LayuiConsts.Grid_PageList, PageList);
+            Options.Add(LayuiConsts.Grid_PageSize, PageSize);
+            Options.Add(LayuiConsts.Gird_Page, Page);
             Options.Add(LayuiConsts.ShowHeader, ShowHeader);
             Options.Add(LayuiConsts.Striped, Striped);
 
-            Options.AddIf(ToolBar.IsNotNullOrWhiteSpace(), LayuiConsts.ToolBar, ToolBar.ToJsonString());
-            Options.AddIf(Url.IsNotNullOrWhiteSpace(), LayuiConsts.Url, Url.ToJsonString());
+            Options.AddIf(Size.HasValue, LayuiConsts.Grid_Size, Size.ToString().ToLower());
+            Options.AddIf(Skin.HasValue, LayuiConsts.Grid_Skin, Skin.ToString().ToLower());
+            Options.AddIf(ToolBar.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_ToolBar, GetString(ToolBar));
+            Options.AddIf(Url.IsNotNullOrWhiteSpace(), LayuiConsts.Url, GetString(Url));
             Options.AddIf(Data.IsNotNullOrWhiteSpace(), LayuiConsts.Data, Data);
             Options.AddIf(QueryParams.IsNotNullOrWhiteSpace(), LayuiConsts.QueryParams, QueryParams);
+            Options.AddIf(LayuiTagHelperConfig.GridParseData.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_ParseData, LayuiTagHelperConfig.GridParseData);
+            Options.AddIf(LayuiTagHelperConfig.GridDefaultParam.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_DefaultParam, LayuiTagHelperConfig.GridDefaultParam);
+
+            Options.Add(LayuiConsts.Grid_Sort, new Dictionary<string, object> { { LayuiConsts.Sort_Name, GetString(SortName) }, { LayuiConsts.Sort_Order, GetString(SortOrder) } });
 
             output.Attributes.Add(LayuiConsts.Fit, Fit.ToString().ToLower());
 
@@ -216,13 +224,14 @@ namespace Util.Web.TagHelpers.Layui
 
                 Options.Add(LayuiConsts.FitColumns, FitColumns);
 
-                var checkBox = $"<th {LayuiConsts.Option}=\"checkbox:true\"></th>";
-
                 async Task AddHead(List<DataGrodColumnTagHelper> cols)
                 {
                     table.Append("<thead>");
                     if (HasCheckBox)
-                        table.Append(checkBox);
+                        table.Append($"<th {LayuiConsts.Option}=\"{{ type: 'checkbox' , fixed: 'left'}}\"></th>");
+                    if (ShowRowNumber)
+                        table.Append($"<th {LayuiConsts.Option}=\"{{ type: 'numbers' , fixed: 'left'}} \"></th>");
+
 
                     foreach (var col in cols.OrderBy(x => x.Sort))
                     {
@@ -233,12 +242,25 @@ namespace Util.Web.TagHelpers.Layui
                 }
 
 
-
                 await AddHead(_cols.ToList());
 
                 output.Content.SetHtmlContent(table.ToString());
             }
             await base.ProcessAsync(context, output);
         }
+
+
+    }
+    public enum Size
+    {
+        Sm,
+        Lg
+    }
+
+    public enum Skin
+    {
+        Line,
+        Row,
+        Nob
     }
 }

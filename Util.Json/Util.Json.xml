@@ -4,5 +4,15 @@
         <name>Util.Json</name>
     </assembly>
     <members>
+        <member name="M:Util.Json.JsonExtensions.ToJsonString``1(``0,System.Boolean,System.Boolean)">
+            <summary>
+            对象转json
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value">对象</param>
+            <param name="hasQuoteName">是否包含引号</param>
+            <param name="isCamelCase">是否采用CamelCase命名</param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

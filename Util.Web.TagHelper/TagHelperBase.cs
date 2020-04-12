@@ -8,6 +8,7 @@ using AngleSharp.Html.Parser;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Newtonsoft.Json.Linq;
 using Util.Extensions;
 using Util.Json;
 
@@ -15,7 +16,7 @@ namespace Util.Web.TagHelpers
 {
     public abstract class TagHelperBase : TagHelper
     {
-        protected abstract string ClassName { get; }
+        protected virtual string ClassName { get; }
         protected abstract string TagName { get; }
         protected virtual bool HasChild { get; } = true;
 
@@ -27,33 +28,25 @@ namespace Util.Web.TagHelpers
         protected virtual string OptionName { get; }
 
         /// <summary>
-        /// 配置属性分割符(默认逗号)
+        /// 配置项的值是否采用CamelCase命名
         /// </summary>
-        protected virtual string OptionSeparator => ",";
+        public virtual bool ValueToCamelCase => false;
 
-        /// <summary>
-        /// 配置属性的属性名和值的分割符(默认冒号)
-        /// </summary>
-        protected virtual string AttributeSeparator => ":";
+        protected Dictionary<string, object> Options { get; set; } = new Dictionary<string, object>();
 
-        protected readonly Dictionary<string, object> Options = new Dictionary<string, object>();
-
-        protected string Option => Options.Select(x =>
-        {
-            var value = x.Value.ToString();
-            if (!(x.Value is string))
-            {
-                value = value.ToCamelCase();
-            }
-            return $"{x.Key}:{value}";
-        }).JoinAsString();
+        protected virtual string Option => Options.ToJsonString(isCamelCase: true);
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             InitOption(context, output);
 
             output.TagName = TagName;
-            output.AddClass(ClassName, HtmlEncoder.Default);
+
+            if (ClassName.IsNotNullOrWhiteSpace())
+            {
+                output.AddClass(ClassName, HtmlEncoder.Default);
+            }
+           
 
             foreach (var item in Class)
             {
@@ -77,14 +70,9 @@ namespace Util.Web.TagHelpers
                 var option = context.AllAttributes[OptionName].Value?.ToString();
                 if (option.IsNotNullOrWhiteSpace())
                 {
-                    foreach (var x in option.Split(OptionSeparator))
-                    {
-                        var items = x.Split(AttributeSeparator);
-                        Options.AddOrUpdate(items[0], items[1]);
-                    }
+                    Options = JObject.Parse(option).ToDictionary();
                 }
             }
-
         }
 
         protected virtual void AddOption(TagHelperContext context, TagHelperOutput output)

@@ -27,17 +27,32 @@ namespace Util.Json
             }, settings)).First().Key;
         }
 
-        public static string ToJsonString<T>(this T value, bool hasQuoteName = false) where T : class
+        /// <summary>
+        /// 对象转json
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">对象</param>
+        /// <param name="hasQuoteName">是否包含引号</param>
+        /// <param name="isCamelCase">是否采用CamelCase命名</param>
+        /// <returns></returns>
+        public static string ToJsonString<T>(this T value, bool hasQuoteName = false, bool isCamelCase = false) where T : class
         {
             string str = "null";
             if (value != null)
             {
                 var jsonSerializer = new JsonSerializer();
+
+                if (isCamelCase)
+                {
+                    jsonSerializer.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                }
+
                 var stringWriter = new StringWriter();
                 using (var jsonTextWriter = new JsonTextWriter(stringWriter))
                 {
                     jsonTextWriter.QuoteName = hasQuoteName;
                     jsonTextWriter.QuoteChar = '\'';
+
                     jsonSerializer.Serialize(jsonTextWriter, value);
                     str = stringWriter.ToString();
                 }

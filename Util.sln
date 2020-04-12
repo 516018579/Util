@@ -19,13 +19,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.Application", "Util.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.AutoMapper", "Util.AutoMapper\Util.AutoMapper.csproj", "{BD0D20AB-8492-401D-8A95-740D550F44E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Web.TagHelper", "Util.Web.TagHelper\Util.Web.TagHelper.csproj", "{D4099652-37D8-42F2-AAFE-D032C5B267B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.Web.TagHelper", "Util.Web.TagHelper\Util.Web.TagHelper.csproj", "{D4099652-37D8-42F2-AAFE-D032C5B267B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Web.TagHelper.Easyui", "Util.Web.TagHelper.Easyui\Util.Web.TagHelper.Easyui.csproj", "{4F4C64FA-66F8-4B14-B484-1FB6EEC7BD85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.Web.TagHelper.Easyui", "Util.Web.TagHelper.Easyui\Util.Web.TagHelper.Easyui.csproj", "{4F4C64FA-66F8-4B14-B484-1FB6EEC7BD85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Excel", "Util.Excel\Util.Excel.csproj", "{7BF5185E-469F-493B-8533-B8A0DC1A19C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.Excel", "Util.Excel\Util.Excel.csproj", "{7BF5185E-469F-493B-8533-B8A0DC1A19C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Web.TagHelper.Layui", "Util.Web.TagHelper.Layui\Util.Web.TagHelper.Layui.csproj", "{ABF6A041-B490-49C5-9AED-FD51BD64EB30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.Web.TagHelper.Layui", "Util.Web.TagHelper.Layui\Util.Web.TagHelper.Layui.csproj", "{ABF6A041-B490-49C5-9AED-FD51BD64EB30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{0B7D95F7-1437-4D87-A0FA-68B25B24C40F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,10 @@ Global
 		{ABF6A041-B490-49C5-9AED-FD51BD64EB30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABF6A041-B490-49C5-9AED-FD51BD64EB30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABF6A041-B490-49C5-9AED-FD51BD64EB30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B7D95F7-1437-4D87-A0FA-68B25B24C40F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B7D95F7-1437-4D87-A0FA-68B25B24C40F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B7D95F7-1437-4D87-A0FA-68B25B24C40F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B7D95F7-1437-4D87-A0FA-68B25B24C40F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
