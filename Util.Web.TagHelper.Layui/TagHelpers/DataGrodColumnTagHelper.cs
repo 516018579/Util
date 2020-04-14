@@ -33,15 +33,15 @@ namespace Util.Web.TagHelpers.Layui
         {
             Options.AddOrUpdate(LayuiConsts.Grid_Col_Sortable, Sortable);
             Options.AddOrUpdate(LayuiConsts.Width, Width);
-            Options.AddOrUpdate(LayuiConsts.Grid_Col_Align, GetString(Align.ToString().ToLower()));
+            Options.AddOrUpdate(LayuiConsts.Grid_Col_Align, Align.ToString().ToLower());
             Options.AddIf(Fixed.HasValue, LayuiConsts.Grid_Col_Fixed, Fixed.ToString().ToLower());
 
-            Options.AddIf(Title.IsNotNullOrWhiteSpace(), LayuiConsts.Title, GetString(Title));
-            Options.AddIf(Field.IsNotNullOrWhiteSpace(), LayuiConsts.Field, GetString(Field.ToCamelCase()));
-            Options.AddIf(Style.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_Col_Style, GetString(Style));
-            Options.AddIf(Formatter.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_Col_Formatter, GetString(Formatter));
-            Options.AddIf(Edit.HasValue, LayuiConsts.Grid_Col_Edit, GetString(Edit.ToString().ToLower()));
-            Options.AddIf(Toolbar.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_Col_Toolbar, GetString(Toolbar));
+            Options.AddIf(Title.IsNotNullOrWhiteSpace(), LayuiConsts.Title, Title);
+            Options.AddIf(Field.IsNotNullOrWhiteSpace(), LayuiConsts.Field, Field.ToCamelCase());
+            Options.AddIf(Style.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_Col_Style, Style);
+            Options.AddIf(Formatter.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_Col_Formatter, Formatter);
+            Options.AddIf(Edit.HasValue, LayuiConsts.Grid_Col_Edit, Edit.ToString().ToLower());
+            Options.AddIf(Toolbar.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_Col_Toolbar, Toolbar);
 
             if (ReplaceField.IsNotNullOrWhiteSpace())
                 output.Attributes.Add(LayuiConsts.Item_Replace, ReplaceField);

@@ -46,7 +46,7 @@ namespace Util.Web.TagHelpers
             {
                 output.AddClass(ClassName, HtmlEncoder.Default);
             }
-           
+
 
             foreach (var item in Class)
             {
@@ -149,15 +149,16 @@ namespace Util.Web.TagHelpers
         }
 
         /// <summary>
-        /// 在字符串开头和结尾添加符号
+        /// 字符串转js代码
         /// </summary>
-        /// <param name="value">字符串</param>
-        /// <param name="symbol">符号</param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public string GetString(string value, string symbol = "'")
+        public JRaw GetJavaScriptString(string value)
         {
-            return $"{symbol}{value}{symbol}";
+            return new JRaw(value);
         }
+
+
 
         public static IHtmlDocument ParseHtml(string html, bool hasBody = false)
         {

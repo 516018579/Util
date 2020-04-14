@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
@@ -20,26 +21,39 @@ namespace Util.Web.TagHelpers.Layui
 
         [HtmlAttributeName(LayuiConsts.Required)]
         public virtual bool? IsRequired { get; set; }
-        public virtual string ValidType { get; set; }
         public virtual bool? Clear { get; set; }
         public virtual int MaxLength { get; set; } = 50;
 
-        protected List<string> ValidTypes = new List<string>();
+        protected virtual HashSet<string> Valids { get; set; } = new HashSet<string>();
+
 
         protected override void InitOption(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.AddOrUpdate(LayuiConsts.ValidAttrName, value =>
+            InitValids(output);
+            base.InitOption(context, output);
+        }
+
+        protected virtual void InitValids(TagHelperOutput output)
+        {
+            if (output.Attributes.ContainsName(LayuiConsts.ValidAttrName))
             {
-                if (value != null)
+                var vaild = output.Attributes[LayuiConsts.ValidAttrName]?.Value?.ToString();
+
+                if (vaild.IsNotNullOrWhiteSpace())
                 {
-                    value += "|" + LayuiConsts.Required;
+                    foreach (var item in vaild.Split('|', StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        Valids.Add(item);
+                    }
                 }
-                else
-                {
-                    value = LayuiConsts.Required;
-                }
-                return value;
-            });
+            }
+
+            if (IsRequired == true)
+            {
+                Valids.Add(LayuiConsts.Required);
+            }
+
+            output.Attributes.AddOrUpdate(LayuiConsts.ValidAttrName, Valids.JoinAsString('|'));
         }
     }
 }

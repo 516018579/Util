@@ -24,7 +24,20 @@ namespace Util.AutoMapper
             });
 
             return query.ProjectTo<TDestination>(map);
-        } 
+        }
+
+        public static IQueryable<TDestination> MapTo<TDestination>(this IQueryable query)
+        {
+            var map = new MapperConfiguration(cfg =>
+            {
+                var sourceType = query.GetType().GetGenericArguments()[0];
+                var destinationType = typeof(TDestination);
+                cfg.CreateMap(sourceType, destinationType);
+                cfg.CreateMap(destinationType, sourceType);
+            });
+
+            return query.ProjectTo<TDestination>(map);
+        }
         #endregion
 
         public static IMappingExpression<TSource, TDestination> ToMember<TSource, TDestination, TDestinonResult, TSourceResult>(this IMappingExpression<TSource, TDestination> expression, Expression<Func<TDestination, TDestinonResult>> destinationFunc, Expression<Func<TSource, TSourceResult>> sourcefunc)

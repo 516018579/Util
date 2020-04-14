@@ -64,14 +64,14 @@ namespace Util.Web.TagHelpers.Layui
 
             Options.AddIf(Size.HasValue, LayuiConsts.Grid_Size, Size.ToString().ToLower());
             Options.AddIf(Skin.HasValue, LayuiConsts.Grid_Skin, Skin.ToString().ToLower());
-            Options.AddIf(ToolBar.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_ToolBar, GetString(ToolBar));
-            Options.AddIf(Url.IsNotNullOrWhiteSpace(), LayuiConsts.Url, GetString(Url));
+            Options.AddIf(ToolBar.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_ToolBar, ToolBar);
+            Options.AddIf(Url.IsNotNullOrWhiteSpace(), LayuiConsts.Url, Url);
             Options.AddIf(Data.IsNotNullOrWhiteSpace(), LayuiConsts.Data, Data);
             Options.AddIf(QueryParams.IsNotNullOrWhiteSpace(), LayuiConsts.QueryParams, QueryParams);
             Options.AddIf(LayuiTagHelperConfig.GridParseData.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_ParseData, LayuiTagHelperConfig.GridParseData);
             Options.AddIf(LayuiTagHelperConfig.GridDefaultParam.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_DefaultParam, LayuiTagHelperConfig.GridDefaultParam);
 
-            Options.Add(LayuiConsts.Grid_Sort, new Dictionary<string, object> { { LayuiConsts.Sort_Name, GetString(SortName) }, { LayuiConsts.Sort_Order, GetString(SortOrder) } });
+            Options.Add(LayuiConsts.Grid_Sort, new Dictionary<string, object> { { LayuiConsts.Sort_Name, SortName }, { LayuiConsts.Sort_Order, SortOrder } });
 
             output.Attributes.Add(LayuiConsts.Fit, Fit.ToString().ToLower());
 

@@ -19,5 +19,11 @@ namespace Util.Web.TagHelpers.Layui
             output.Attributes.AddOrUpdate("type", "number");
             return base.ProcessAsync(context, output);
         }
+
+        protected override void InitValids(TagHelperOutput output)
+        {
+            Valids.Add("number");
+            base.InitValids(output);
+        }
     }
 }

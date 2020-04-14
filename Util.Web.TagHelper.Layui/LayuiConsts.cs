@@ -64,7 +64,9 @@ namespace Util.Web.TagHelpers.Layui
         public const string Dialog_Closed = "closed";
         public const string Dialog_Buttons = "buttons";
         public const string Dialog_IsMax = "maximized";
-        public const string Dialog_OnClose = "onClose";
+        public const string Dialog_OnClose = "cancel";
+        public const string Dialog_OnSave = "yes";
+        public const string Dialog_Content = "content";
 
 
         public const string Item_Sort = "sort";
