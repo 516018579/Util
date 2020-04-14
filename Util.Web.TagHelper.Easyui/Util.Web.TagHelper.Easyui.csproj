@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <PackageId>DN.Util.Web.TagHelper.Easyui</PackageId>
+    <PackageId>Util.Web.TagHelper.Easyui</PackageId>
     <RootNamespace>Util.Web.TagHelpers.Easyui</RootNamespace>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DN.Util.Json" Version="1.0.2" />
-    <PackageReference Include="DN.Util.Web.TagHelper" Version="1.0.10" />
+    <PackageReference Include="Util.Json" Version="1.0.2" />
+    <PackageReference Include="Util.Web.TagHelper" Version="1.0.13" />
   </ItemGroup>
 
 </Project>

@@ -20,6 +20,7 @@ namespace Util.Web.TagHelpers.Layui
         public const string Plain = "plain";
         public const string Iconcls = "iconcls";
         public const string Clear = "clear";
+        public const string Colspan = "colspan";
 
         public const string ValidAttrName = "lay-verify";
         public const string ValidType_MaxLength = "maxLength";
@@ -64,7 +65,9 @@ namespace Util.Web.TagHelpers.Layui
         public const string Dialog_Closed = "closed";
         public const string Dialog_Buttons = "buttons";
         public const string Dialog_IsMax = "maximized";
-        public const string Dialog_OnClose = "cancel";
+        public const string Dialog_IsMaxMin = "maxmin";
+        public const string Dialog_OnClose = "end";
+        public const string Dialog_OnShow = "success";
         public const string Dialog_OnSave = "yes";
         public const string Dialog_Content = "content";
 

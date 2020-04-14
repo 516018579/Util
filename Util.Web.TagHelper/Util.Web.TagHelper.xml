@@ -21,12 +21,11 @@
             <param name="html"></param>
             <returns></returns>
         </member>
-        <member name="M:Util.Web.TagHelpers.TagHelperBase.GetString(System.String,System.String)">
+        <member name="M:Util.Web.TagHelpers.TagHelperBase.GetJavaScriptString(System.String)">
             <summary>
-            在字符串开头和结尾添加符号
+            字符串转js代码
             </summary>
-            <param name="value">字符串</param>
-            <param name="symbol">符号</param>
+            <param name="value"></param>
             <returns></returns>
         </member>
         <member name="F:Util.Web.TagHelpers.TagHelperConfig.GetComboboxDataFunc">

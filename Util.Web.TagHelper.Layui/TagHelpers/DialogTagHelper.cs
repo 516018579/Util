@@ -15,11 +15,10 @@ namespace Util.Web.TagHelpers.Layui
         protected override string TagName => "div";
         public bool Closed { get; set; } = true;
         public bool HasSave { get; set; } = true;
-        public bool HasClose { get; set; } = true;
         public string OnSave { get; set; }
         public string OnClose { get; set; }
+        public string OnShow { get; set; }
         public string SaveButtonName { get; set; } = "保存";
-        public string CloseButtonName { get; set; } = "关闭";
         public bool IsMax { get; set; }
         public string Title { get; set; }
         public DialogType Type { get; set; }
@@ -40,27 +39,16 @@ namespace Util.Web.TagHelpers.Layui
         /// </summary>
         public string Offset { get; set; }
 
+        /// <summary>
+        /// 是否显示最大最小按钮
+        /// </summary>
+        public bool ShowMaxMin { get; set; } = true;
+
+        public int MaxWidth { get; set; }
+        public int MaxHeight { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var buttons = new StringBuilder("[");
-            var id = output.Attributes["id"]?.Value;
-
-            if (HasSave)
-                buttons.Append($"{{ text:'{SaveButtonName}', iconCls:'icon-ok', handler:function(){{ {OnSave} }} }},");
-            if (HasClose)
-                buttons.Append($"{{ text:'{CloseButtonName}', iconCls:'icon-cancel', handler:function(){{ {(id != null ? $"$('#{id}').window('close')" : "")} }} }},");
-
-
-            buttons.Append("]");
-
-            Options.AddIf(OnClose.IsNotNullOrWhiteSpace(), LayuiConsts.Dialog_OnClose, $"function(){{ {OnClose} }}");
-
-            Options.AddIf(IsMax, LayuiConsts.Dialog_IsMax, IsMax);
-
-            Options.Add(LayuiConsts.Dialog_Buttons, buttons.ToString());
-
-            output.Attributes.Add(LayuiConsts.Dialog_Closed, Closed.ToString().ToCamelCase());
-
             if (Closed)
             {
                 var style = output.Attributes["style"]?.ToString() ?? "";
@@ -92,6 +80,21 @@ namespace Util.Web.TagHelpers.Layui
             Options.AddIf(Title.IsNotNullOrWhiteSpace(), "title", Title);
             Options.AddIf(content.IsNotNullOrWhiteSpace(), LayuiConsts.Dialog_Content, content);
             Options.AddIf(Area.IsNotNullOrWhiteSpace(), "area", Area);
+            if (HasSave)
+            {
+                Options.Add("btn", new[] { SaveButtonName });
+                if (OnSave.IsNotNullOrWhiteSpace())
+                {
+                    Options.Add("yes", GetJavaScriptString($"function(){{ {OnSave} }} }}"));
+                }
+            }
+
+            Options.AddIf(OnClose.IsNotNullOrWhiteSpace(), LayuiConsts.Dialog_OnClose, GetJavaScriptString($"function(){{ {OnClose} }}"));
+            Options.AddIf(OnShow.IsNotNullOrWhiteSpace(), LayuiConsts.Dialog_OnShow, GetJavaScriptString($"function(){{ {OnShow} }}"));
+            Options.AddIf(IsMax, LayuiConsts.Dialog_IsMax, IsMax);
+            Options.AddIf(ShowMaxMin, LayuiConsts.Dialog_IsMaxMin, true);
+            Options.AddIf(MaxWidth > 0, "maxWidth", MaxWidth);
+            Options.AddIf(MaxHeight > 0, "maxHeight", MaxHeight);
 
             base.InitOption(context, output);
         }

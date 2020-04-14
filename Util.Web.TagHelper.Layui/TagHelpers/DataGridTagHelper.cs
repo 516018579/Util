@@ -56,7 +56,7 @@ namespace Util.Web.TagHelpers.Layui
 
         protected override void AddOption(TagHelperContext context, TagHelperOutput output)
         {
-            Options.Add(LayuiConsts.Grid_PageList, PageList);
+            Options.Add(LayuiConsts.Grid_PageList, GetJavaScriptString(PageList));
             Options.Add(LayuiConsts.Grid_PageSize, PageSize);
             Options.Add(LayuiConsts.Gird_Page, Page);
             Options.Add(LayuiConsts.ShowHeader, ShowHeader);
@@ -66,10 +66,10 @@ namespace Util.Web.TagHelpers.Layui
             Options.AddIf(Skin.HasValue, LayuiConsts.Grid_Skin, Skin.ToString().ToLower());
             Options.AddIf(ToolBar.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_ToolBar, ToolBar);
             Options.AddIf(Url.IsNotNullOrWhiteSpace(), LayuiConsts.Url, Url);
-            Options.AddIf(Data.IsNotNullOrWhiteSpace(), LayuiConsts.Data, Data);
-            Options.AddIf(QueryParams.IsNotNullOrWhiteSpace(), LayuiConsts.QueryParams, QueryParams);
-            Options.AddIf(LayuiTagHelperConfig.GridParseData.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_ParseData, LayuiTagHelperConfig.GridParseData);
-            Options.AddIf(LayuiTagHelperConfig.GridDefaultParam.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_DefaultParam, LayuiTagHelperConfig.GridDefaultParam);
+            Options.AddIf(Data.IsNotNullOrWhiteSpace(), LayuiConsts.Data, GetJavaScriptString(Data));
+            Options.AddIf(QueryParams.IsNotNullOrWhiteSpace(), LayuiConsts.QueryParams, GetJavaScriptString(QueryParams));
+            Options.AddIf(LayuiTagHelperConfig.GridParseData.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_ParseData, GetJavaScriptString(LayuiTagHelperConfig.GridParseData));
+            Options.AddIf(LayuiTagHelperConfig.GridDefaultParam.IsNotNullOrWhiteSpace(), LayuiConsts.Grid_DefaultParam, GetJavaScriptString(LayuiTagHelperConfig.GridDefaultParam));
 
             Options.Add(LayuiConsts.Grid_Sort, new Dictionary<string, object> { { LayuiConsts.Sort_Name, SortName }, { LayuiConsts.Sort_Order, SortOrder } });
 

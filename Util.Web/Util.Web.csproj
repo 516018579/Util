@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>DN.Util.Web</PackageId>
+    <PackageId>Util.Web</PackageId>
     <Version>1.0.6</Version>
   </PropertyGroup>
 
@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DN.Util.Application" Version="1.0.3" />
+    <PackageReference Include="Util.Application" Version="1.0.3" />
   </ItemGroup>
 
 </Project>

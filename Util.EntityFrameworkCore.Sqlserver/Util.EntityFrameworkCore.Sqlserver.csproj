@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <PackageId>DN.Util.EntityFrameworkCore.Sqlserver</PackageId>
+    <PackageId>Util.EntityFrameworkCore.Sqlserver</PackageId>
     <Version>1.0.1</Version>
   </PropertyGroup>
 

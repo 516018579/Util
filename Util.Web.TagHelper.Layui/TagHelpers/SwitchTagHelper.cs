@@ -8,13 +8,13 @@ using Util.Web.TagHelpers.Extensions;
 
 namespace Util.Web.TagHelpers.Layui
 {
-    [HtmlTargetElement("layui-textbox")]
-    public class SwitchTagHelper : LayuiTagHelper
+    [HtmlTargetElement("layui-switch")]
+    public class SwitchTagHelper : TextboxTagHelper
     {
+        protected override string ClassName => "layui-switch";
         protected override string TagName => "input";
         public string Label { get; set; }
         public bool IsChecked { get; set; }
-        public bool IsDisabled { get; set; }
 
         public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -25,7 +25,7 @@ namespace Util.Web.TagHelpers.Layui
                 output.Attributes.Add(LayuiConsts.LayText, Label);
             if (IsChecked)
                 output.Attributes.Add("checked", null);
-            if (IsDisabled)
+            if (IsDisable == true)
                 output.Attributes.Add("disabled", null);
 
             return base.ProcessAsync(context, output);

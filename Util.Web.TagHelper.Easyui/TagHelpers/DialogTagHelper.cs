@@ -38,7 +38,7 @@ namespace Util.Web.TagHelpers.Easyui
 
             Options.AddIf(IsMax, EasyuiConsts.Dialog_IsMax, IsMax);
 
-            Options.Add(EasyuiConsts.Dialog_Buttons, buttons.ToString());
+            Options.Add(EasyuiConsts.Dialog_Buttons, GetJavaScriptString(buttons.ToString()));
 
             output.Attributes.Add(EasyuiConsts.Dialog_Closed, Closed.ToString().ToCamelCase());
 

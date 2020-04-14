@@ -33,7 +33,7 @@ namespace Util.Web.TagHelpers.Layui
         {
             Options.AddIf(DateType.HasValue, "type", DateType.ToString().ToLower());
             Options.AddIf(Format.IsNotNullOrWhiteSpace(), "format", Format);
-            Options.AddIf(IsRange, "range", "true");
+            Options.AddIf(IsRange, "range", true);
 
             Options.AddIf(Max.IsNotNullOrWhiteSpace(), "max", Max);
             Options.AddIf(Max.IsNotNullOrWhiteSpace(), "min", Min);
@@ -54,6 +54,7 @@ namespace Util.Web.TagHelpers.Layui
         Year,
         Month,
         Time,
+        Date,
         DateTime
     }
 }

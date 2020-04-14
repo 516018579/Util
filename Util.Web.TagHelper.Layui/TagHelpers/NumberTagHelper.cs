@@ -14,6 +14,8 @@ namespace Util.Web.TagHelpers.Layui
     [HtmlTargetElement("layui-textarea")]
     public class NumberTagHelper : TextboxTagHelper
     {
+        public int? Precision { get; set; }
+
         public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             output.Attributes.AddOrUpdate("type", "number");

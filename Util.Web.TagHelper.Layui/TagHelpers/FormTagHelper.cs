@@ -13,21 +13,19 @@ using Util.Domain.Entities;
 using Util.Extensions;
 using Util.Json;
 using Util.Web.Attributes.Control;
-using Util.Web.TagHelpers.Easyui;
 
-namespace Util.Web.TagHelpers.Easyui
+namespace Util.Web.TagHelpers.Layui
 {
-    [HtmlTargetElement("easyui-form")]
-    public class FormTagHelper : EasyuiModelTagHelper
+    [HtmlTargetElement("layui-form")]
+    public class FormTagHelper : LayuiModelTagHelper
     {
-        protected override string ClassName => "";
+        protected override string ClassName => "layui-form";
         protected override string TagName => "form";
         protected override bool HasChild => false;
-        public int ColCount { get; set; } = 2;
-        public int CellPadding { get; set; } = 5;
+        public uint ColCount { get; set; } = 2;
         public string IdName { get; set; }
         private bool ShowId => IdName.IsNotNullOrWhiteSpace();
-        private int ColSpan => ColCount * 2 - 1;
+        private uint ColSpan => ColCount * 2 - 1;
         public string RemarkHeight { get; set; } = "60px";
         public bool IsSearch { get; set; } = false;
 
@@ -40,19 +38,14 @@ namespace Util.Web.TagHelpers.Easyui
 
             if (ModelTagHelper.HasModel)
             {
-                var table = new StringBuilder($"<table cellpadding={CellPadding}>");
+                var form = new StringBuilder();
 
                 CreateFormItem();
 
                 var childHtml = (await output.GetChildContentAsync()).GetContent();
                 if (childHtml.IsNotNullOrWhiteSpace())
                 {
-                    var childs = ParseHtml(childHtml).Body.Children;
-
-                    while (childs.Any() && childs[0].TagName != "TR")
-                    {
-                        childs = childs[0].Children;
-                    }
+                    var childs = ParseHtml(childHtml).QuerySelectorAll(".layui-form-item");
 
                     foreach (var child in childs)
                     {
@@ -81,15 +74,17 @@ namespace Util.Web.TagHelpers.Easyui
 
                 #region 标签转html
 
-                var index = 0;
+                uint index = 0;
 
                 foreach (var item in _formItems.OrderBy(x => x.Sort))
                 {
                     index++;
 
+                    item.ColMd = 12 / ColCount;
+
                     var remainder = index % ColCount;//余数
 
-                    var td = await RenderInnerTagHelper(item, context, CreateTagHelperOutput(), false);
+                    var formItem = await RenderInnerTagHelper(item, context, CreateTagHelperOutput(), false);
 
                     if (item.ColSpan.HasValue)
                     {
@@ -97,7 +92,7 @@ namespace Util.Web.TagHelpers.Easyui
 
                         if (itemColCount >= (remainder == 0 ? ColCount : remainder))
                         {
-                            table.Append($"<tr>{td}</tr>");
+                            form.Append($"<div class=\"layui-row\">{formItem}</div>");
                             index += itemColCount.Value + remainder;
                             continue;
                         }
@@ -105,14 +100,14 @@ namespace Util.Web.TagHelpers.Easyui
 
                     if (index % ColCount == 1)
                     {
-                        table.Append("<tr>");
+                        form.Append("<div class=\"layui-row\">");
                     }
 
-                    table.Append(td);
+                    form.Append(formItem);
 
                     if (index > 0 && remainder == 0 || _formItems.Count == 1)
                     {
-                        table.Append("</tr>");
+                        form.Append("</div>");
                     }
                 }
 
@@ -122,18 +117,17 @@ namespace Util.Web.TagHelpers.Easyui
                     textArea.Height = RemarkHeight;
                     textArea.MinWidth = "200px";
                     var remarkContent = await RenderInnerTagHelper(textArea, context, CreateTagHelperOutput(), false);
-                    table.Append($"<tr>{remarkContent}</tr>");
+                    form.Append($"<div class=\"layui-row\">{remarkContent}</div>");
                 }
                 #endregion
 
-                table.Append("</table>");
 
                 foreach (var hideItem in _hideItems)
                 {
-                    table.Append($"<input name=\"{hideItem.ToCamelCase()}\" hidden=\"hidden\" />");
+                    form.Append($"<input name=\"{hideItem.ToCamelCase()}\" hidden=\"hidden\" />");
                 }
 
-                output.Content.SetHtmlContent(table.ToString());
+                output.Content.SetHtmlContent(form.ToString());
 
                 await base.ProcessAsync(context, output);
             }
@@ -162,8 +156,7 @@ namespace Util.Web.TagHelpers.Easyui
                 }
                 if (name == remarkName && ModelTagHelper.IsRemarkType)
                 {
-                    var remarkTag = new TextboxTagHelper();
-                    remarkTag.IsMultiline = true;
+                    var remarkTag = new TextAreaTagHelper();
                     remarkTag.MaxLength = DomainConsts.MaxDescLength;
                     _textAreas.Add(CreateItemTag(remarkName, WebConsts.DisplayName_Remark, remarkTag));
                     continue;
@@ -251,39 +244,61 @@ namespace Util.Web.TagHelpers.Easyui
                             colName = comboboxAttr.DisplayName;
                         }
                     }
-                    else if (valueType == typeof(bool))
-                    {
-                        tag.Class.Add("boolCombobox");
-                    }
 
                     itemTag = tag;
+                }
+                else if (valueType == typeof(bool))
+                {
+                    itemTag = new SwitchTagHelper();
                 }
                 else if (propertyType.IsNumberType())
                 {
                     var precisionAttr = GetAttribute<NumberFormatAttribute>(attributes);
-                    itemTag = new NumberboxTagHelper
+                    itemTag = new NumberTagHelper
                     {
                         Precision = precisionAttr?.Precision
                     };
                 }
                 else if (valueType == typeof(DateTime))
                 {
+                    var datebox = new DateboxTagHelper();
                     var datetimeAttr = GetAttribute<DateFormatAttribute>(attributes);
-                    if (datetimeAttr == null)
-                        itemTag = new DateboxTagHelper();
-                    else
-                        itemTag = new DateTimeboxTagHelper();
+                    if (datetimeAttr != null)
+                    {
+                        switch (datetimeAttr.DateFormatString)
+                        {
+                            case "yyyy":
+                                datebox.DateType = DateType.Year;
+                                break;
+                            case "MM":
+                                datebox.DateType = DateType.Month;
+                                break;
+                            case "yyyy-MM-dd HH:mm:ss":
+                                datebox.DateType = DateType.DateTime;
+                                break;
+                            case "HH:mm:ss":
+                                datebox.DateType = DateType.Time;
+                                break;
+                            default:
+                                datebox.DateType = DateType.Date;
+                                break;
+                        }
+
+                        datebox.Format = datetimeAttr.DateFormatString;
+                    }
+
+
                 }
                 else if (isFileType)
                 {
-                    itemTag = new FileTagHelper();
+                    itemTag = new FileTagHelper() { Field = name };
                 }
                 else
                 {
                     var maxLengthAttr = GetAttribute<MaxLengthAttribute>(attributes);
                     isTextArea = GetAttribute<TextAreaAttribute>(attributes) != null;
 
-                    var tag = new TextboxTagHelper();
+                    var tag = isTextArea ? new TextAreaTagHelper() : new TextboxTagHelper();
                     if (maxLengthAttr != null)
                         maxLength = maxLengthAttr.Length;
 
@@ -295,7 +310,6 @@ namespace Util.Web.TagHelpers.Easyui
 
                     if (isTextArea)
                     {
-                        tag.IsMultiline = true;
                         if (maxLengthAttr == null)
                             maxLength = DomainConsts.MaxDescLength;
                     }

@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Util.Extensions</AssemblyName>
     <RootNamespace>Util.Extensions</RootNamespace>
-    <PackageId>DN.Util.Extensions</PackageId>
+    <PackageId>Util.Extensions</PackageId>
     <Version>1.0.2</Version>
   </PropertyGroup>
 
