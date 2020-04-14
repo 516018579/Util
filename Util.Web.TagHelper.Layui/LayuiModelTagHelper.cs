@@ -11,9 +11,15 @@ namespace Util.Web.TagHelpers.Layui
     {
         protected ModelTagHelper ModelTagHelper;
 
+        private Type _modelType;
         public Type ModelType
         {
-            set => ModelTagHelper = new ModelTagHelper(value);
+            get => _modelType;
+            set
+            {
+                _modelType = value;
+                ModelTagHelper = new ModelTagHelper(_modelType);
+            }
         }
     }
 }
