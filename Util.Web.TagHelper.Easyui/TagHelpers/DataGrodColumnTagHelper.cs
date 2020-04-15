@@ -30,13 +30,13 @@ namespace Util.Web.TagHelpers.Easyui
 
         protected override void AddOption(TagHelperContext context, TagHelperOutput output)
         {
-            Options.AddOrUpdate(EasyuiConsts.Grid_Col_Align, $"'{Align.ToString().ToLower()}'");
-            Options.AddIf(Field.IsNotNullOrWhiteSpace(), EasyuiConsts.Field, $"'{Field?.ToCamelCase()}'");
-            Options.AddIf(Title.IsNotNullOrWhiteSpace(), EasyuiConsts.Title, $"'{Title}'");
+            Options.AddOrUpdate(EasyuiConsts.Grid_Col_Align, Align.ToString().ToLower());
+            Options.AddIf(Field.IsNotNullOrWhiteSpace(), EasyuiConsts.Field, Field.ToCamelCase());
+            Options.AddIf(Title.IsNotNullOrWhiteSpace(), EasyuiConsts.Title, Title);
             Options.AddOrUpdate(EasyuiConsts.Width, Width);
             Options.AddIf(Styler.IsNotNullOrWhiteSpace(), EasyuiConsts.Grid_Col_Styler, Styler);
-            Options.AddIf(Formatter.IsNotNullOrWhiteSpace(), EasyuiConsts.Grid_Col_Formatter, Formatter);
-            Options.AddIf(Editor.IsNotNullOrWhiteSpace(), EasyuiConsts.Grid_Col_Editor, Editor);
+            Options.AddIf(Formatter.IsNotNullOrWhiteSpace(), EasyuiConsts.Grid_Col_Formatter, GetJavaScriptString(Formatter));
+            Options.AddIf(Editor.IsNotNullOrWhiteSpace(), EasyuiConsts.Grid_Col_Editor, GetJavaScriptString(Editor));
 
             if (IsFrozen)
                 output.Attributes.Add(EasyuiConsts.Grid_Col_IsFrozen, IsFrozen);

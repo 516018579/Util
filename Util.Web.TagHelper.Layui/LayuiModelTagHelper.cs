@@ -21,5 +21,10 @@ namespace Util.Web.TagHelpers.Layui
                 ModelTagHelper = new ModelTagHelper(_modelType);
             }
         }
+
+        protected LayuiModelTagHelper()
+        {
+            ModelTagHelper = new ModelTagHelper();
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace Util.Web.TagHelpers.Easyui
         protected ModelTagHelper ModelTagHelper;
 
         private Type _modelType;
+
         public Type ModelType
         {
             get => _modelType;
@@ -21,6 +22,10 @@ namespace Util.Web.TagHelpers.Easyui
                 _modelType = value;
                 ModelTagHelper = new ModelTagHelper(_modelType);
             }
+        }
+        protected EasyuiModelTagHelper()
+        {
+            ModelTagHelper = new ModelTagHelper();
         }
     }
 }

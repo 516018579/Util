@@ -50,20 +50,20 @@ namespace Util.Web.TagHelpers.Easyui
 
         protected override void AddOption(TagHelperContext context, TagHelperOutput output)
         {
-            Options.Add(EasyuiConsts.Page_List, PageList);
+            Options.Add(EasyuiConsts.Page_List, GetJavaScriptString(PageList));
             Options.Add(EasyuiConsts.Page_Size, PageSize);
-            Options.Add(EasyuiConsts.Sort_Name, SortName.ToJsonString());
-            Options.Add(EasyuiConsts.Sort_Order, SortOrder.ToJsonString());
+            Options.Add(EasyuiConsts.Sort_Name, SortName);
+            Options.Add(EasyuiConsts.Sort_Order, SortOrder);
             Options.Add(EasyuiConsts.ShowRowNumber, ShowRowNumber);
             Options.Add(EasyuiConsts.ShowPage, ShowPage);
             Options.Add(EasyuiConsts.SingleSelect, SingleSelect);
             Options.Add(EasyuiConsts.ShowHeader, ShowHeader);
             Options.Add(EasyuiConsts.Striped, Striped);
 
-            Options.AddIf(ToolBar.IsNotNullOrWhiteSpace(), EasyuiConsts.ToolBar, ToolBar.ToJsonString());
-            Options.AddIf(Url.IsNotNullOrWhiteSpace(), EasyuiConsts.Url, Url.ToJsonString());
-            Options.AddIf(Data.IsNotNullOrWhiteSpace(), EasyuiConsts.Data, Data);
-            Options.AddIf(QueryParams.IsNotNullOrWhiteSpace(), EasyuiConsts.QueryParams, QueryParams);
+            Options.AddIf(ToolBar.IsNotNullOrWhiteSpace(), EasyuiConsts.ToolBar, ToolBar);
+            Options.AddIf(Url.IsNotNullOrWhiteSpace(), EasyuiConsts.Url, Url);
+            Options.AddIf(Data.IsNotNullOrWhiteSpace(), EasyuiConsts.Data, GetJavaScriptString(Data));
+            Options.AddIf(QueryParams.IsNotNullOrWhiteSpace(), EasyuiConsts.QueryParams, GetJavaScriptString(QueryParams));
 
             output.Attributes.Add(EasyuiConsts.Fit, Fit.ToString().ToLower());
 
