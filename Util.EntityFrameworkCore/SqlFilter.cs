@@ -24,6 +24,17 @@ namespace Util.EntityFrameworkCore
         /// <summary>
         /// 值的类型(0:string, 1:int, 2:datetime, 3:bool, 4:decimal, 5:long)
         /// </summary>
-        public int ValueType { get; set; }
+        public FilterValueType ValueType { get; set; }
+    }
+
+    public enum FilterValueType
+    {
+        String,
+        Int,
+        DateTime,
+        Bool,
+        Decimal,
+        Long,
+        Guid
     }
 }
