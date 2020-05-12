@@ -59,6 +59,12 @@ namespace Util.AutoMapper
             return GetConfiguration(source.GetType(), typeof(TDestination)).CreateMapper().Map<TDestination>(source);
         }
 
+        public static TDestination MapTo<TSource, TDestination>(this TSource source, TDestination destination)
+        {
+            return GetConfiguration<TSource, TDestination>().CreateMapper().Map(source, destination);
+        }
+
+
         public static TDestination MapTo<TSource, TDestination>(this TSource source,
             Action<IMappingExpression<TSource, TDestination>> destinationAction = null,
             Action<IMappingExpression<TDestination, TSource>> sourceAction = null,

@@ -60,22 +60,26 @@ namespace Util.EntityFrameworkCore
                         where.Append(filter.Field + filter.Oper + "@" + i + " ");
 
                         dynamic value;
+
                         switch (filter.ValueType)
                         {
-                            case 1:
+                            case ValueType.整数:
                                 value = Convert.ToInt32(filter.Value);
                                 break;
-                            case 2:
+                            case ValueType.时间:
                                 value = Convert.ToDateTime(filter.Value);
                                 break;
-                            case 3:
+                            case ValueType.布尔:
                                 value = Convert.ToBoolean(filter.Value);
                                 break;
-                            case 4:
+                            case ValueType.小数:
                                 value = Convert.ToDecimal(filter.Value);
                                 break;
-                            case 5:
+                            case ValueType.长整数:
                                 value = Convert.ToInt64(filter.Value);
+                                break;
+                            case ValueType.唯一标识符:
+                                value = Guid.Parse(filter.Value.ToString());
                                 break;
                             default:
                                 value = filter.Value;
@@ -114,25 +118,28 @@ namespace Util.EntityFrameworkCore
                                 where.Append(" or ");
                             }
                         }
-                        where.Append(filter.Field + filter.Oper + "@" + i + " ");
+                        where.Append(filter.Field + (filter.Oper ?? "=") + "@" + i + " ");
 
                         dynamic value;
                         switch (filter.ValueType)
                         {
-                            case 1:
+                            case ValueType.整数:
                                 value = Convert.ToInt32(filter.Value);
                                 break;
-                            case 2:
+                            case ValueType.时间:
                                 value = Convert.ToDateTime(filter.Value);
                                 break;
-                            case 3:
+                            case ValueType.布尔:
                                 value = Convert.ToBoolean(filter.Value);
                                 break;
-                            case 4:
+                            case ValueType.小数:
                                 value = Convert.ToDecimal(filter.Value);
                                 break;
-                            case 5:
+                            case ValueType.长整数:
                                 value = Convert.ToInt64(filter.Value);
+                                break;
+                            case ValueType.唯一标识符:
+                                value = Guid.Parse(filter.Value.ToString());
                                 break;
                             default:
                                 value = filter.Value;

@@ -8,7 +8,8 @@ namespace Util.Web.TagHelpers
     {
         /// <summary>
         /// 获取下拉框数据方法
+        /// 属性名, 条件字段, 条件判断符, 条件值
         /// </summary>
-        public static Func<string, Task<Dictionary<string, string>>> GetComboboxDataFunc;
+        public static Func<string, string, string, dynamic, Task<Dictionary<string, string>>> GetComboboxDataFunc { get; set; }
     }
 }

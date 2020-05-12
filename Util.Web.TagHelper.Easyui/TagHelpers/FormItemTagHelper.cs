@@ -16,10 +16,13 @@ namespace Util.Web.TagHelpers.Easyui
         public string Field { get; set; }
         public string Title { get; set; }
         public int? Sort { get; set; }
-        public int? ColSpan { get; set; }
+        public uint? ColSpan { get; set; }
         public string Height { get; set; }
         public string Width { get; set; }
         public string MinWidth { get; set; }
+        public string Group { get; set; }
+        public string Before { get; set; }
+        public string After { get; set; }
         public TextboxTagHelper ContentTag { get; set; }
         protected override bool HasChild => false;
         public string ChildContent { get; set; }
@@ -47,7 +50,7 @@ namespace Util.Web.TagHelpers.Easyui
                     css += $"width: {Width};";
                 if (MinWidth.IsNotNullOrWhiteSpace())
                     css += $"min-width: {MinWidth};";
-                if (ColSpan > 1)
+                if (ColSpan > 1 && Width.IsNullOrWhiteSpace())
                     css += "width: 100%;";
                 if (css != "")
                     innerOutput.Attributes.Add("style", css);
@@ -93,7 +96,7 @@ namespace Util.Web.TagHelpers.Easyui
                 var colSpan = td.GetAttribute("colspan");
                 if (colSpan.IsNotNullOrWhiteSpace())
                 {
-                    item.ColSpan = colSpan.To<int>();
+                    item.ColSpan = colSpan.To<uint>();
                 }
 
                 item.ChildContent = td.InnerHtml;

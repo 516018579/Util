@@ -23,6 +23,20 @@ namespace Util.Web.TagHelpers.Easyui
         [HtmlAttributeName(EasyuiConsts.Editable)]
         public override bool? IsEdit { get; set; } = false;
 
+        /// <summary>
+        /// 查询条件字段
+        /// </summary>
+        public string WhereField { get; set; }
+
+        /// <summary>
+        /// 查询条件逻辑符
+        /// </summary>
+        public string WhereOper { get; set; } = "=";
+        /// <summary>
+        /// 查询条件内容
+        /// </summary>
+        public dynamic WhereValue { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             Dictionary<string, string> list;
@@ -37,7 +51,7 @@ namespace Util.Web.TagHelpers.Easyui
             }
             else
             {
-                list = await TagHelperConfig.GetComboboxDataFunc(ModelType.Name);
+                list = await TagHelperConfig.GetComboboxDataFunc(ModelType.Name, WhereField, WhereOper, WhereValue);
             }
 
             if (DefaultValue != null && DefaultValue is bool)

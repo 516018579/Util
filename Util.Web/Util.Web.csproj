@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>Util.Web</PackageId>
-    <Version>1.0.6</Version>
+    <Version>1.0.16</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -11,7 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Util.Application" Version="1.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.0.0" />
+    <PackageReference Include="Util.Json" Version="1.0.2" />
   </ItemGroup>
 
 </Project>

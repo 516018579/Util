@@ -5,15 +5,15 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AngleSharp.Html.Parser;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Util.Application.Attributes.Control;
 using Util.Application.Attributes.Format;
 using Util.Domain;
 using Util.Domain.Entities;
 using Util.Extensions;
 using Util.Json;
-using Util.Web.Attributes.Control;
-using Util.Web.TagHelpers.Easyui;
 
 namespace Util.Web.TagHelpers.Easyui
 {
@@ -23,17 +23,19 @@ namespace Util.Web.TagHelpers.Easyui
         protected override string ClassName => "";
         protected override string TagName => "form";
         protected override bool HasChild => false;
-        public int ColCount { get; set; } = 2;
-        public int CellPadding { get; set; } = 5;
+        public uint ColCount { get; set; } = 2;
+        public uint CellPadding { get; set; } = 5;
         public string IdName { get; set; }
         private bool ShowId => IdName.IsNotNullOrWhiteSpace();
-        private int ColSpan => ColCount * 2 - 1;
+        private uint ColSpan => ColCount * 2 - 1;
         public string RemarkHeight { get; set; } = "60px";
         public bool IsSearch { get; set; } = false;
+        public uint? ItemWidth { get; set; }
 
         private readonly List<FormItemTagHelper> _formItems = new List<FormItemTagHelper>();
         private readonly List<FormItemTagHelper> _textAreas = new List<FormItemTagHelper>();
         private readonly List<string> _hideItems = new List<string>();
+        private readonly HashSet<string> _item = new HashSet<string>();
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -81,15 +83,43 @@ namespace Util.Web.TagHelpers.Easyui
 
                 #region 标签转html
 
-                var index = 0;
+                uint index = 0;
 
                 foreach (var item in _formItems.OrderBy(x => x.Sort))
                 {
+                    if (_item.Contains(item.Field))
+                        continue;
                     index++;
 
                     var remainder = index % ColCount;//余数
 
-                    var td = await RenderInnerTagHelper(item, context, CreateTagHelperOutput(), false);
+                    StringBuilder td = new StringBuilder();
+                    if (item.Group.IsNotNullOrWhiteSpace())
+                    {
+                        var groupIndex = 0;
+
+                        foreach (var groupItem in _formItems.Where(x => x.Group == item.Group))
+                        {
+                            var itemContent = await RenderInnerTagHelper(groupItem, context, CreateTagHelperOutput(), false);
+                            var doc = new HtmlParser().ParseDocument($"<table><tr>{itemContent}</tr></table>");
+                            var items = doc.QuerySelectorAll("td");
+
+                            if (groupIndex == 0)
+                            {
+                                td.Append(items[0].OuterHtml);
+                                td.Append($"<td {(groupItem.ColSpan.HasValue ? $"colspan='{groupItem.ColSpan}'" : "")}>");
+                            }
+
+                            td.Append($"{groupItem.Before}{items[1].InnerHtml}{groupItem.After}");
+                            _item.Add(groupItem.Field);
+
+                            groupIndex++;
+                        }
+                        td.Append("</td>");
+                    }
+                    else
+                        td.Append(await RenderInnerTagHelper(item, context, CreateTagHelperOutput(), false));
+
 
                     if (item.ColSpan.HasValue)
                     {
@@ -244,6 +274,14 @@ namespace Util.Web.TagHelpers.Easyui
                         if (comboboxAttr.IsLoadData)
                         {
                             tag.ModelType = comboboxAttr.Type;
+
+                            var comboAttr = GetAttribute<ComboboxAttribute>(attributes);
+                            if (comboAttr?.WhereField.IsNotNullOrWhiteSpace() == true)
+                            {
+                                tag.WhereField = comboAttr.WhereField;
+                                tag.WhereValue = comboAttr.WhereValue;
+                                tag.WhereOper = comboAttr.WhereOper;
+                            }
                         }
 
                         if (colNameAttr == null && comboboxAttr.DisplayName != null)
@@ -311,10 +349,33 @@ namespace Util.Web.TagHelpers.Easyui
                 itemTag.IsRequired = isRequired;
                 itemTag.MaxLength = maxLength;
 
+                FormItemTagHelper formItem;
+
                 if (isTextArea)
-                    _textAreas.Add(CreateItemTag(name, colName, itemTag, index));
+                {
+                    formItem = CreateItemTag(name, colName, itemTag, index);
+                    _textAreas.Add(formItem);
+                }
                 else
-                    _formItems.Add(CreateItemTag(name, colName, itemTag, isId ? 0 : index));
+                {
+                    formItem = CreateItemTag(name, colName, itemTag, isId ? 0 : index);
+                    _formItems.Add(formItem);
+                }
+
+                var itemAttr = GetAttribute<FormItemAttribute>(attributes);
+                if (itemAttr != null)
+                {
+                    if (itemAttr.After.IsNotNullOrWhiteSpace())
+                        formItem.After = itemAttr.After;
+                    if (itemAttr.Before.IsNotNullOrWhiteSpace())
+                        formItem.Before = itemAttr.Before;
+                    if (itemAttr.ColSpan.HasValue)
+                        formItem.ColSpan = itemAttr.ColSpan;
+                    if (itemAttr.Group.IsNotNullOrWhiteSpace())
+                        formItem.Group = itemAttr.Group;
+                    if (itemAttr.Width.IsNotNullOrWhiteSpace())
+                        formItem.Width = itemAttr.Width;
+                }
             }
         }
 
@@ -330,6 +391,10 @@ namespace Util.Web.TagHelpers.Easyui
             tag.Title = itemTitle;
             tag.Sort = itemSort;
             tag.ContentTag = contentTag;
+            if (ItemWidth.HasValue)
+            {
+                tag.Width = $"{ItemWidth}px";
+            }
             return tag;
         }
     }

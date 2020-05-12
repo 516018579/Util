@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
 using Util.Json;
-using Util.Web.TagHelpers.Easyui;
 
 namespace Util.Web.TagHelpers.Easyui
 {
@@ -59,7 +58,10 @@ namespace Util.Web.TagHelpers.Easyui
             if (Clear.HasValue)
                 output.Attributes.Add(EasyuiConsts.Clear, Clear.ToString().ToCamelCase());
 
-            Options.AddOrUpdate(EasyuiConsts.ValidType, $"'{ValidTypes.JoinAsString()}'");
+            if (ValidTypes.Any())
+            {
+                Options.AddOrUpdate(EasyuiConsts.ValidType, $"'{ValidTypes.JoinAsString()}'");
+            }
         }
     }
 }

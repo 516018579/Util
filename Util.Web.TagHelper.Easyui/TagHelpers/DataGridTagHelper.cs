@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Util.Application.Attributes.Control;
 using Util.Application.Attributes.Format;
 using Util.Domain;
 using Util.Domain.Entities;
 using Util.Extensions;
 using Util.Json;
-using Util.Web.Attributes.Control;
 
 namespace Util.Web.TagHelpers.Easyui
 {
@@ -87,6 +88,15 @@ namespace Util.Web.TagHelpers.Easyui
                         continue;
                     if (isId && IdName.IsNullOrWhiteSpace())
                         continue;
+
+                    if (typeof(IEnumerable<>).IsAssignableFrom(property.PropertyType))
+                    {
+                        var genericTypes = property.PropertyType.GetGenericArguments();
+                        if (genericTypes.Length == 0 || genericTypes.Length > 1 || !genericTypes[0].IsValueType())
+                        {
+                            continue;
+                        }
+                    }
 
                     var col = new DataGrodColumnTagHelper();
 

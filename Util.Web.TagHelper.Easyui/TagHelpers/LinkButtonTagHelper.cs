@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Extensions;
-using Util.Web.TagHelpers.Easyui;
 
 namespace Util.Web.TagHelpers.Easyui
 {
