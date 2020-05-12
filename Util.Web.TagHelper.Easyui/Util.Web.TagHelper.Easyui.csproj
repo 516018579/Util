@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <PackageId>Util.Web.TagHelper.Easyui</PackageId>
     <RootNamespace>Util.Web.TagHelpers.Easyui</RootNamespace>
-    <Version>1.0.12</Version>
+    <Version>1.0.13</Version>
   </PropertyGroup>
 
   <ItemGroup>

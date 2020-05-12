@@ -89,10 +89,11 @@ namespace Util.Web.TagHelpers.Easyui
                     if (isId && IdName.IsNullOrWhiteSpace())
                         continue;
 
-                    if (typeof(IEnumerable<>).IsAssignableFrom(property.PropertyType))
+
+                    if (property.PropertyType.IsGenericType && property.PropertyType.IsAssignableFromGenericTypeInterface(typeof(IEnumerable<>)))
                     {
                         var genericTypes = property.PropertyType.GetGenericArguments();
-                        if (genericTypes.Length == 0 || genericTypes.Length > 1 || !genericTypes[0].IsValueType())
+                        if (genericTypes.Length > 1 || !genericTypes[0].IsValueType())
                         {
                             continue;
                         }
