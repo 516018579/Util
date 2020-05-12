@@ -178,7 +178,7 @@ namespace Util.Web.TagHelpers.Easyui
                 var name = property.Name;
                 var isId = name == nameof(WebConsts.Id);
                 var propertyType = property.PropertyType;
-                if (property.IsDefined(typeof(NotFormItemAttribute), false))
+                if (property.IsDefined(typeof(NotFormItemAttribute), false) || !property.CanWrite)
                     continue;
                 if (isId && !ShowId)
                     continue;
@@ -204,6 +204,7 @@ namespace Util.Web.TagHelpers.Easyui
 
                 var valueType = propertyType.GetValueType();
                 var isNullType = propertyType.IsNullableType();
+                var isEnum = valueType.IsEnum;
                 var isValueType = propertyType.IsValueType && !isNullType;
                 var isName = ModelTagHelper.IsNameType && name == nameof(IHasName.Name);
                 var attributes = property.GetCustomAttributes(true);
@@ -215,10 +216,13 @@ namespace Util.Web.TagHelpers.Easyui
                 var isCombo = comboboxAttr != null || propertyType == typeof(bool) || propertyType == typeof(bool?) || valueType.IsEnum;
                 var colName = colNameAttr == null ? name : colNameAttr.DisplayName;
 
+
                 if (name == colName)
                 {
                     if (isFileType)
                         colName = "文件";
+                    else if (isEnum)
+                        colName = propertyType.GetDescription();
                     else
                     {
                         switch (name)
@@ -258,7 +262,7 @@ namespace Util.Web.TagHelpers.Easyui
                     var defaultValueAttr = GetAttribute<DefaultValueAttribute>(attributes);
                     var defaultIndexAttr = GetAttribute<DefaultIndexAttribute>(attributes);
 
-                    var isEnum = valueType.IsEnum;
+
                     var tag = new ComboboxTagHelper
                     {
                         DefaultValue = defaultValueAttr?.Value,
