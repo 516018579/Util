@@ -26,7 +26,7 @@ namespace Util.Web.TagHelpers.Easyui
         public uint ColCount { get; set; } = 2;
         public uint CellPadding { get; set; } = 5;
         public string IdName { get; set; }
-        private bool ShowId => IdName.IsNotNullOrWhiteSpace();
+        public bool HasId { get; set; }
         private uint ColSpan => ColCount * 2 - 1;
         public string RemarkHeight { get; set; } = "60px";
         public bool IsSearch { get; set; } = false;
@@ -71,8 +71,7 @@ namespace Util.Web.TagHelpers.Easyui
                                 if (itemTag.Title.IsNullOrWhiteSpace())
                                     itemTag.Title = replaceTag.Title;
 
-                                itemTag.ContentTag = replaceTag.ContentTag;
-
+                                //itemTag.ContentTag = replaceTag.ContentTag;
                                 _formItems.Remove(replaceTag);
                             }
                         }
@@ -180,22 +179,32 @@ namespace Util.Web.TagHelpers.Easyui
                 var propertyType = property.PropertyType;
                 if (property.IsDefined(typeof(NotFormItemAttribute), false) || !property.CanWrite)
                     continue;
-                if (isId && !ShowId)
-                    continue;
                 var isFileType = propertyType == typeof(IFormFile);
                 if (!propertyType.IsValueType() && !isFileType)
                     continue;
-                if (property.IsDefined(typeof(HideFormItemAttribute), false))
+                if (isId && !HasId)
+                {
+                    continue;
+                }
+                if (property.IsDefined(typeof(HideFormItemAttribute), false) || isId)
                 {
                     _hideItems.Add(property.Name);
                     continue;
                 }
+
+                var attributes = property.GetCustomAttributes(true);
+                var itemAttr = GetAttribute<FormItemAttribute>(attributes);
                 if (name == remarkName && ModelTagHelper.IsRemarkType)
                 {
                     var remarkTag = new TextboxTagHelper();
                     remarkTag.IsMultiline = true;
                     remarkTag.MaxLength = DomainConsts.MaxDescLength;
-                    _textAreas.Add(CreateItemTag(remarkName, WebConsts.DisplayName_Remark, remarkTag));
+
+                    var textAreaTag = CreateItemTag(remarkName, WebConsts.DisplayName_Remark, remarkTag);
+
+                    textAreaTag.Width = itemAttr == null || itemAttr.Width.IsNullOrWhiteSpace() ? "100%" : itemAttr.Width;
+                    _textAreas.Add(textAreaTag);
+
                     continue;
                 }
 
@@ -207,7 +216,6 @@ namespace Util.Web.TagHelpers.Easyui
                 var isEnum = valueType.IsEnum;
                 var isValueType = propertyType.IsValueType && !isNullType;
                 var isName = ModelTagHelper.IsNameType && name == nameof(IHasName.Name);
-                var attributes = property.GetCustomAttributes(true);
                 var isDisable = GetAttribute<DisableAttribute>(attributes) != null;
                 var colNameAttr = GetAttribute<DisplayNameAttribute>(attributes);
                 var requiredAttr = GetAttribute<RequiredAttribute>(attributes);
@@ -222,7 +230,7 @@ namespace Util.Web.TagHelpers.Easyui
                     if (isFileType)
                         colName = "文件";
                     else if (isEnum)
-                        colName = propertyType.GetDescription();
+                        colName = valueType.GetDescription();
                     else
                     {
                         switch (name)
@@ -366,7 +374,7 @@ namespace Util.Web.TagHelpers.Easyui
                     _formItems.Add(formItem);
                 }
 
-                var itemAttr = GetAttribute<FormItemAttribute>(attributes);
+
                 if (itemAttr != null)
                 {
                     if (itemAttr.After.IsNotNullOrWhiteSpace())
@@ -395,7 +403,7 @@ namespace Util.Web.TagHelpers.Easyui
             tag.Title = itemTitle;
             tag.Sort = itemSort;
             tag.ContentTag = contentTag;
-            if (ItemWidth.HasValue)
+            if (ItemWidth.HasValue && !tag.ColSpan.HasValue)
             {
                 tag.Width = $"{ItemWidth}px";
             }

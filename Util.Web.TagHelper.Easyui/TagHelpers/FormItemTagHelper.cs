@@ -61,7 +61,17 @@ namespace Util.Web.TagHelpers.Easyui
             else
             {
                 var content = await output.GetChildContentAsync();
+
                 td.Append(content.GetContent());
+
+                if (Field.IsNotNullOrWhiteSpace())
+                {
+                    var doc = ParseHtml(ChildContent);
+                    var contentElement = doc.Body.FirstElementChild;
+                    contentElement.SetAttribute("name", Field.ToCamelCase());
+                    ChildContent = contentElement.OuterHtml;
+                }
+
 
                 td.Append(ChildContent);
             }
