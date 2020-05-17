@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
-namespace Util.Abp.EntityFrameworkCore
+namespace Util.Abp.Domain.Repositories.Extensions
 {
-    public static class AbpEfCoreExtensions
+    public static class AbpRepositoryExtensions
     {
         #region Insert
 

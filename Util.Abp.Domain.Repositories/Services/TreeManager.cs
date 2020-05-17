@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Threading;
 using System.Threading.Tasks;
 using Util.Abp.Doamin.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -10,11 +11,10 @@ using Volo.Abp.Uow;
 
 namespace Util.Abp.Domain.Repositories.Services
 {
-
-    public class TreeManager<TEntity, TPrimaryKey> : DomainService
-        where TEntity : class, ITree<TEntity, TPrimaryKey>
-        where TPrimaryKey : struct
+    public class TreeManager
     {
+        public static int DefaultCodeLength { get; set; } = 5;
+
         /// <summary>
         /// Creates code for given numbers.
         /// Example: if numbers are 4,2 then returns "00004.00002";
@@ -27,7 +27,7 @@ namespace Util.Abp.Domain.Repositories.Services
                 return null;
             }
 
-            var codeLength = MesConsts.DefaultCodeLength;
+            var codeLength = DefaultCodeLength;
 
             try
             {
@@ -142,7 +142,12 @@ namespace Util.Abp.Domain.Repositories.Services
 
             return splittedCode.Take(splittedCode.Length - 1).JoinAsString(".");
         }
+    }
 
+    public class TreeManager<TEntity, TPrimaryKey> : DomainService, ITreeManager<TEntity, TPrimaryKey>
+        where TEntity : class, ITree<TEntity, TPrimaryKey>
+        where TPrimaryKey : struct
+    {
         protected IRepository<TEntity, TPrimaryKey> Repository { get; private set; }
         public TreeManager(IRepository<TEntity, TPrimaryKey> repository)
         {
@@ -150,33 +155,33 @@ namespace Util.Abp.Domain.Repositories.Services
         }
 
         [UnitOfWork]
-        public virtual async Task CreateAsync(TEntity organizationUnit)
+        public virtual async Task CreateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default(CancellationToken))
         {
-            organizationUnit.Code = await GetNextChildCodeAsync(organizationUnit.ParentId);
+            entity.Code = await GetNextChildCodeAsync(entity.ParentId);
 
-            await Repository.InsertAsync(organizationUnit);
+            await Repository.InsertAsync(entity, autoSave, cancellationToken);
         }
 
-        public virtual async Task UpdateAsync(TEntity organizationUnit)
+        public virtual async Task UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default(CancellationToken))
         {
-            await Repository.UpdateAsync(organizationUnit);
+            await Repository.UpdateAsync(entity, autoSave, cancellationToken);
         }
 
         public virtual async Task<string> GetNextChildCodeAsync(TPrimaryKey? parentId)
         {
-            var lastChild = await GetLastChildOrNullAsync(parentId);
+            var lastChild = GetLastChildOrNull(parentId);
             if (lastChild == null)
             {
                 var parentCode = parentId != null ? await GetCodeAsync(parentId.Value) : null;
-                return AppendCode(parentCode, CreateCode<TEntity>(1));
+                return TreeManager.AppendCode(parentCode, TreeManager.CreateCode<TEntity>(1));
             }
 
-            return CalculateNextCode<TEntity>(lastChild.Code);
+            return TreeManager.CalculateNextCode<TEntity>(lastChild.Code);
         }
 
-        public virtual async Task<TEntity> GetLastChildOrNullAsync(TPrimaryKey? parentId)
+        public virtual TEntity GetLastChildOrNull(TPrimaryKey? parentId)
         {
-            var children = await Repository.Where(ou => ou.ParentId.Equals(parentId)).ToDynamicListAsync()
+            var children = Repository.Where(ou => ou.ParentId.Equals(parentId)).ToList();
             return children.OrderBy(c => c.Code).LastOrDefault();
         }
 
@@ -186,16 +191,16 @@ namespace Util.Abp.Domain.Repositories.Services
         }
 
         [UnitOfWork]
-        public virtual async Task DeleteAsync(TPrimaryKey id)
+        public virtual async Task DeleteAsync(TPrimaryKey id, bool autoSave = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             var children = await FindChildrenAsync(id, true);
 
             foreach (var child in children)
             {
-                await Repository.DeleteAsync(child);
+                await Repository.DeleteAsync(child, autoSave, cancellationToken);
             }
 
-            await Repository.DeleteAsync(id);
+            await Repository.DeleteAsync(id, autoSave, cancellationToken);
         }
 
         [UnitOfWork]
@@ -220,7 +225,7 @@ namespace Util.Abp.Domain.Repositories.Services
             //Update Children Codes
             foreach (var child in children)
             {
-                child.Code = AppendCode(organizationUnit.Code, GetRelativeCode(child.Code, oldCode));
+                child.Code = TreeManager.AppendCode(organizationUnit.Code, TreeManager.GetRelativeCode(child.Code, oldCode));
             }
         }
 
@@ -228,7 +233,7 @@ namespace Util.Abp.Domain.Repositories.Services
         {
             if (!recursive)
             {
-                return await Repository.GetAllListAsync(ou => ou.ParentId.Equals(parentId));
+                return Repository.Where(ou => ou.ParentId.Equals(parentId)).ToList();
             }
 
             if (!parentId.HasValue)
@@ -238,11 +243,32 @@ namespace Util.Abp.Domain.Repositories.Services
 
             var code = await GetCodeAsync(parentId.Value);
 
-            return await Repository.GetAllListAsync(
+            return Repository.Where(
                 ou => ou.Code.StartsWith(code) && !ou.Id.Equals(parentId.Value)
-            );
+            ).ToList();
         }
 
+
+        public async Task<string> GetRootCode(TPrimaryKey id)
+        {
+            var child = await Repository.GetAsync(id);
+
+            return child.Code.Split('.')[0];
+        }
+
+        public async Task<TEntity> GetRootAsync(TPrimaryKey id)
+        {
+            var rootCode = await GetRootCode(id);
+
+            return Repository.First(x => x.Code == rootCode);
+        }
+
+        public async Task<List<TEntity>> GetAllParentListAsync(TPrimaryKey id, bool hasSelf = false)
+        {
+            var child = await Repository.GetAsync(id);
+
+            return Repository.Where(x => child.Code.StartsWith(x.Code) && (hasSelf || !x.ParentId.Equals(child.ParentId))).ToList();
+        }
     }
 
 

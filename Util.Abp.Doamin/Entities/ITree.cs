@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Volo.Abp.Domain.Entities;
 
@@ -13,6 +14,7 @@ namespace Util.Abp.Doamin.Entities
         where TPrimaryKey : struct
         where TEntity : class
     {
+        [Required]
         string Code { get; set; }
         [ForeignKey(nameof(ParentId))]
         TEntity Parent { get; set; }
