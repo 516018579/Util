@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Util.Application.Attributes.Control;
 using Util.Application.Attributes.Format;
 using Util.Domain;
+using Util.Domain.Attributes;
 using Util.Domain.Entities;
 using Util.Extensions;
 using Util.Json;
@@ -177,7 +178,7 @@ namespace Util.Web.TagHelpers.Easyui
                 var name = property.Name;
                 var isId = name == nameof(WebConsts.Id);
                 var propertyType = property.PropertyType;
-                if (property.IsDefined(typeof(NotFormItemAttribute), false) || !property.CanWrite)
+                if (property.IsDefined(typeof(NotFormItemAttribute), false))
                     continue;
                 var isFileType = propertyType == typeof(IFormFile);
                 if (!propertyType.IsValueType() && !isFileType)
@@ -194,6 +195,7 @@ namespace Util.Web.TagHelpers.Easyui
 
                 var attributes = property.GetCustomAttributes(true);
                 var itemAttr = GetAttribute<FormItemAttribute>(attributes);
+
                 if (name == remarkName && ModelTagHelper.IsRemarkType)
                 {
                     var remarkTag = new TextboxTagHelper();
@@ -216,7 +218,7 @@ namespace Util.Web.TagHelpers.Easyui
                 var isEnum = valueType.IsEnum;
                 var isValueType = propertyType.IsValueType && !isNullType;
                 var isName = ModelTagHelper.IsNameType && name == nameof(IHasName.Name);
-                var isDisable = GetAttribute<DisableAttribute>(attributes) != null;
+                var isDisable = GetAttribute<DisableAttribute>(attributes) != null || !property.CanWrite;
                 var colNameAttr = GetAttribute<DisplayNameAttribute>(attributes);
                 var requiredAttr = GetAttribute<RequiredAttribute>(attributes);
                 var comboboxAttr = GetAttribute<ComboboxAttribute>(attributes);
@@ -263,6 +265,7 @@ namespace Util.Web.TagHelpers.Easyui
                 int maxLength = DomainConsts.DefaultStringLength;
 
                 TextboxTagHelper itemTag = null;
+
 
 
                 if (isCombo)
@@ -343,6 +346,30 @@ namespace Util.Web.TagHelpers.Easyui
                         maxLength = stringLength.Value;
                     }
 
+                    var isEmail = GetAttribute<EmailAddressAttribute>(attributes) != null;
+                    if (isEmail)
+                    {
+                        tag.ValidTypes.Add("email");
+                    }
+
+                    var isIdCard = GetAttribute<IdCardAttribute>(attributes) != null;
+                    if (isIdCard)
+                    {
+                        tag.ValidTypes.Add("idCard");
+                    }
+
+                    var isPhone = GetAttribute<PhoneAttribute>(attributes) != null || GetAttribute<PhoneNumberAttribute>(attributes) != null;
+                    if (isPhone)
+                    {
+                        tag.ValidTypes.Add("phone");
+                    }
+
+                    var isMobilePhone = GetAttribute<MobilePhoneAttribute>(attributes) != null;
+                    if (isMobilePhone)
+                    {
+                        tag.ValidTypes.Add("mobile");
+                    }
+
                     if (isTextArea)
                     {
                         tag.IsMultiline = true;
@@ -352,6 +379,8 @@ namespace Util.Web.TagHelpers.Easyui
 
                     itemTag = tag;
                 }
+
+
 
                 if (isDisable)
                 {

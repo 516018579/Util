@@ -13,7 +13,7 @@ namespace Util.Web.Extensions
         #region IFormFile
         public static Task SaveAsync(this IFormFile file, string path)
         {
-            using (var fileStream = new FileStream(path, FileMode.Create))
+            using (var fileStream = new FileStream(Path.Combine(WebConsts.WebRootPath, path), FileMode.Create))
             {
                 return file.CopyToAsync(fileStream);
             }
@@ -31,7 +31,7 @@ namespace Util.Web.Extensions
             var value = session.GetString(key);
 
             return value == null ? default : JsonConvert.DeserializeObject<T>(value);
-        } 
+        }
         #endregion
 
     }

@@ -229,11 +229,18 @@ namespace Util.Web.TagHelpers.Easyui
                     }
                 }
 
+                if (!FitColumns.HasValue)
+                {
+                    if (ColCount < FitColCount)
+                    {
+                        FitColumns = true;
+                    }
+                    else
+                    {
+                        FitColumns = FitColCount > ColCount;
+                    }
+                }
 
-                if (!FitColumns.HasValue && ColCount < FitColCount)
-                    FitColumns = true;
-                else
-                    FitColumns = FitColCount > ColCount;
 
                 Options.Add(EasyuiConsts.FitColumns, FitColumns);
 

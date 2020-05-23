@@ -26,7 +26,7 @@ namespace Util.Web.TagHelpers.Easyui
         public virtual bool? Clear { get; set; }
         public virtual int MaxLength { get; set; } = 50;
 
-        protected List<string> ValidTypes = new List<string>();
+        public List<string> ValidTypes = new List<string>();
 
         protected override void AddOption(TagHelperContext context, TagHelperOutput output)
         {
@@ -52,7 +52,6 @@ namespace Util.Web.TagHelpers.Easyui
                 ValidTypes.AddRange(valids);
             }
 
-
             if (IsDisable == true)
                 Clear = false;
             if (Clear.HasValue)
@@ -60,7 +59,7 @@ namespace Util.Web.TagHelpers.Easyui
 
             if (ValidTypes.Any())
             {
-                Options.AddOrUpdate(EasyuiConsts.ValidType, $"'{ValidTypes.JoinAsString()}'");
+                Options.AddOrUpdate(EasyuiConsts.ValidType, GetJavaScriptString(ValidTypes.ToJsonString()));
             }
         }
     }

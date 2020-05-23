@@ -2,6 +2,8 @@
 {
     public class WebConsts
     {
+        public static string WebRootPath { get; set; }
+
         public const string Id = "Id";
         public const string IsActive = "IsActive";
 
