@@ -137,6 +137,11 @@ namespace Util.Web.TagHelpers.Easyui
 
                     if (isEnum || isBool)
                     {
+                        if (name == property.Name)
+                        {
+                            name = valueType.GetDescription();
+                        }
+
                         string data;
                         if (isBool)
                         {

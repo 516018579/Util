@@ -61,6 +61,21 @@ namespace Util.Extensions
         }
 
         /// <summary>
+        /// 获取相差的年份
+        /// </summary>
+        /// <param name="startTime">开始时间</param>
+        /// <param name="endTime">结束时间</param>
+        /// <returns>相差的年数</returns>
+        public static int GetDiffYear(this DateTime startTime, DateTime? endTime = null)
+        {
+            startTime = startTime.Date;
+            var now = endTime ?? DateTime.Today;
+            int year = now.Year - startTime.Year;
+            if (startTime > now.AddYears(-year)) year--;
+            return year;
+        }
+
+        /// <summary>
         /// 获取1970年到指定时间的毫秒数
         /// </summary>
         /// <param name="dateTime">时间</param>
