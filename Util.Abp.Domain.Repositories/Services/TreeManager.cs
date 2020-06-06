@@ -247,8 +247,12 @@ namespace Util.Abp.Domain.Repositories.Services
                 ou => ou.Code.StartsWith(code) && !ou.Id.Equals(parentId.Value)
             ).ToList();
         }
+        public async Task<List<TEntity>> FindParentAsync(TPrimaryKey id, bool hasSelf = false)
+        {
+            var child = await Repository.GetAsync(id);
 
-
+            return Repository.Where(x => child.Code.StartsWith(x.Code) && (hasSelf || !x.ParentId.Equals(child.ParentId))).ToList();
+        }
         public async Task<string> GetRootCode(TPrimaryKey id)
         {
             var child = await Repository.GetAsync(id);
@@ -262,14 +266,5 @@ namespace Util.Abp.Domain.Repositories.Services
 
             return Repository.First(x => x.Code == rootCode);
         }
-
-        public async Task<List<TEntity>> GetAllParentListAsync(TPrimaryKey id, bool hasSelf = false)
-        {
-            var child = await Repository.GetAsync(id);
-
-            return Repository.Where(x => child.Code.StartsWith(x.Code) && (hasSelf || !x.ParentId.Equals(child.ParentId))).ToList();
-        }
     }
-
-
 }

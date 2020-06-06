@@ -16,7 +16,23 @@ namespace Util.Abp.Domain.Repositories.Services
         Task<string> GetCodeAsync(TPrimaryKey id);
         Task DeleteAsync(TPrimaryKey id, bool autoSave = false, CancellationToken cancellationToken = default(CancellationToken));
         Task MoveAsync(TPrimaryKey id, TPrimaryKey? parentId);
+
+        /// <summary>
+        /// 获取子节点
+        /// </summary>
+        /// <param name="parentId">父节点id</param>
+        /// <param name="recursive">是否递归查询所有子节点(默认只查询第一级)</param>
+        /// <param name="hasSelf">是否包含自己</param>
+        /// <returns></returns>
         Task<List<TEntity>> FindChildrenAsync(TPrimaryKey? parentId, bool recursive = false);
+
+        /// <summary>
+        /// 获取父节点
+        /// </summary>
+        /// <param name="id">子节点id</param>
+        /// <param name="hasSelf">是否包含子节点</param>
+        /// <returns></returns>
+        Task<List<TEntity>> FindParentAsync(TPrimaryKey id, bool hasSelf = false);
 
         /// <summary>
         /// 获取根节点的code
@@ -31,13 +47,5 @@ namespace Util.Abp.Domain.Repositories.Services
         /// <param name="id">子节点id</param>
         /// <returns></returns>
         Task<TEntity> GetRootAsync(TPrimaryKey id);
-
-        /// <summary>
-        /// 获取所有父节点
-        /// </summary>
-        /// <param name="id">子节点id</param>
-        /// <param name="hasSelf">是否包含子节点</param>
-        /// <returns></returns>
-        Task<List<TEntity>> GetAllParentListAsync(TPrimaryKey id, bool hasSelf = false);
     }
 }
