@@ -35,7 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.Abp.Domain.Repositorie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.IdGenerate", "Util.IdGenerate\Util.IdGenerate.csproj", "{83A1E327-F6B3-4136-907C-24BCC6B0E4CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.EntityFrameworkCore.Function", "Util.EntityFrameworkCore.Function\Util.EntityFrameworkCore.Function.csproj", "{2B51F90C-AF9F-44BA-8A0A-927314299814}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util.EntityFrameworkCore.Function", "Util.EntityFrameworkCore.Function\Util.EntityFrameworkCore.Function.csproj", "{2B51F90C-AF9F-44BA-8A0A-927314299814}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.Web.Mvc", "Util.Web.Mvc\Util.Web.Mvc.csproj", "{5DB02128-46ED-411B-BA6D-7A5A5B3D23BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,6 +113,10 @@ Global
 		{2B51F90C-AF9F-44BA-8A0A-927314299814}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B51F90C-AF9F-44BA-8A0A-927314299814}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B51F90C-AF9F-44BA-8A0A-927314299814}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DB02128-46ED-411B-BA6D-7A5A5B3D23BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DB02128-46ED-411B-BA6D-7A5A5B3D23BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DB02128-46ED-411B-BA6D-7A5A5B3D23BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DB02128-46ED-411B-BA6D-7A5A5B3D23BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
