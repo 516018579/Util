@@ -68,11 +68,30 @@ namespace Util.Extensions
         /// <returns>相差的年数</returns>
         public static int GetDiffYear(this DateTime startTime, DateTime? endTime = null)
         {
-            startTime = startTime.Date;
-            var now = endTime ?? DateTime.Today;
+            var now = endTime ?? DateTime.Now;
             int year = now.Year - startTime.Year;
             if (startTime > now.AddYears(-year)) year--;
             return year;
+        }
+
+        /// <summary>
+        /// 获取相差的月数
+        /// </summary>
+        /// <param name="startTime">开始时间</param>
+        /// <param name="endTime">结束时间</param>
+        /// <returns>相差的月数</returns>
+        public static int GetDiffMonth(this DateTime startTime, DateTime? endTime = null)
+        {
+            var now = endTime ?? DateTime.Now;
+
+            var diffYear = now.Year - startTime.Year;
+
+            var nowMonth = now.Month < startTime.Month ? 12 * diffYear + now.Month : now.Month;
+
+            int month = nowMonth - startTime.Month;
+            if (startTime > now.AddMonths(-month)) month--;
+
+            return month;
         }
 
         /// <summary>

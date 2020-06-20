@@ -33,7 +33,7 @@ namespace Util.Web.TagHelpers.Easyui
         public bool ShowPage { get; set; } = true;
         public bool HasCheckBox { get; set; } = true;
         public bool IsSort { get; set; } = true;
-        public bool SingleSelect { get; set; }
+        public bool SingleSelect { get; set; } = true;
         public bool ShowHeader { get; set; } = true;
         public bool Striped { get; set; } = true;
         public string ToolBar { get; set; }
