@@ -40,382 +40,389 @@ namespace Util.Web.TagHelpers.Easyui
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            var table = new StringBuilder($"<table cellpadding={CellPadding}>");
 
-            if (ModelTagHelper.HasModel)
+            CreateFormItem();
+
+            var childHtml = (await output.GetChildContentAsync()).GetContent();
+            if (childHtml.IsNotNullOrWhiteSpace())
             {
-                var table = new StringBuilder($"<table cellpadding={CellPadding}>");
+                var childs = ParseHtml(childHtml).Body.Children;
 
-                CreateFormItem();
-
-                var childHtml = (await output.GetChildContentAsync()).GetContent();
-                if (childHtml.IsNotNullOrWhiteSpace())
+                while (childs.Any() && childs[0].TagName != "TR")
                 {
-                    var childs = ParseHtml(childHtml).Body.Children;
-
-                    while (childs.Any() && childs[0].TagName != "TR")
-                    {
-                        childs = childs[0].Children;
-                    }
-
-                    foreach (var child in childs)
-                    {
-                        var itemTag = FormItemTagHelper.Create(child.OuterHtml);
-
-                        if (itemTag.ReplaceField.IsNotNullOrWhiteSpace())
-                        {
-                            var replaceTag = _formItems.FirstOrDefault(x => x.Field.Equals(itemTag.ReplaceField, StringComparison.CurrentCultureIgnoreCase));
-                            if (replaceTag != null)
-                            {
-                                if (!itemTag.Sort.HasValue)
-                                    itemTag.Sort = replaceTag.Sort;
-                                itemTag.Field = replaceTag.Field;
-                                if (itemTag.Title.IsNullOrWhiteSpace())
-                                    itemTag.Title = replaceTag.Title;
-
-                                //itemTag.ContentTag = replaceTag.ContentTag;
-                                _formItems.Remove(replaceTag);
-                            }
-                        }
-
-                        _formItems.Add(itemTag);
-                    }
+                    childs = childs[0].Children;
                 }
 
-                #region 标签转html
-
-                uint index = 0;
-
-                foreach (var item in _formItems.OrderBy(x => x.Sort))
+                foreach (var child in childs)
                 {
-                    if (_item.Contains(item.Field))
-                        continue;
-                    index++;
+                    var itemTag = FormItemTagHelper.Create(child.OuterHtml);
 
-                    var remainder = index % ColCount;//余数
-
-                    StringBuilder td = new StringBuilder();
-                    if (item.Group.IsNotNullOrWhiteSpace())
+                    if (itemTag.ReplaceField.IsNotNullOrWhiteSpace())
                     {
-                        var groupIndex = 0;
-
-                        foreach (var groupItem in _formItems.Where(x => x.Group == item.Group))
+                        var replaceTag = _formItems.FirstOrDefault(x => x.Field.Equals(itemTag.ReplaceField, StringComparison.CurrentCultureIgnoreCase));
+                        if (replaceTag != null)
                         {
-                            var itemContent = await RenderInnerTagHelper(groupItem, context, CreateTagHelperOutput(), false);
-                            var doc = new HtmlParser().ParseDocument($"<table><tr>{itemContent}</tr></table>");
-                            var items = doc.QuerySelectorAll("td");
+                            if (!itemTag.Sort.HasValue)
+                                itemTag.Sort = replaceTag.Sort;
+                            itemTag.Field = replaceTag.Field;
+                            if (itemTag.Title.IsNullOrWhiteSpace())
+                                itemTag.Title = replaceTag.Title;
 
-                            if (groupIndex == 0)
-                            {
-                                td.Append(items[0].OuterHtml);
-                                td.Append($"<td {(groupItem.ColSpan.HasValue ? $"colspan='{groupItem.ColSpan}'" : "")}>");
-                            }
-
-                            td.Append($"{groupItem.Before}{items[1].InnerHtml}{groupItem.After}");
-                            _item.Add(groupItem.Field);
-
-                            groupIndex++;
-                        }
-                        td.Append("</td>");
-                    }
-                    else
-                        td.Append(await RenderInnerTagHelper(item, context, CreateTagHelperOutput(), false));
-
-
-                    if (item.ColSpan.HasValue)
-                    {
-                        var itemColCount = (item.ColSpan + 1) / ColCount;
-
-                        if (itemColCount >= (remainder == 0 ? ColCount : remainder))
-                        {
-                            table.Append($"<tr>{td}</tr>");
-                            index += itemColCount.Value + remainder;
-                            continue;
+                            //itemTag.ContentTag = replaceTag.ContentTag;
+                            _formItems.Remove(replaceTag);
                         }
                     }
 
-                    if (index % ColCount == 1)
-                    {
-                        table.Append("<tr>");
-                    }
-
-                    table.Append(td);
-
-                    if (index > 0 && remainder == 0 || _formItems.Count == 1)
-                    {
-                        table.Append("</tr>");
-                    }
+                    _formItems.Add(itemTag);
                 }
-
-                foreach (var textArea in _textAreas)
-                {
-                    textArea.ColSpan = ColSpan;
-                    textArea.Height = RemarkHeight;
-                    textArea.MinWidth = "200px";
-                    var remarkContent = await RenderInnerTagHelper(textArea, context, CreateTagHelperOutput(), false);
-                    table.Append($"<tr>{remarkContent}</tr>");
-                }
-                #endregion
-
-                table.Append("</table>");
-
-                foreach (var hideItem in _hideItems)
-                {
-                    table.Append($"<input name=\"{hideItem.ToCamelCase()}\" hidden=\"hidden\" />");
-                }
-
-                output.Content.SetHtmlContent(table.ToString());
-
-                await base.ProcessAsync(context, output);
             }
+
+            #region 标签转html
+
+            uint index = 0;
+
+            foreach (var item in _formItems.OrderBy(x => x.Sort))
+            {
+                if (_item.Contains(item.Field))
+                    continue;
+                index++;
+
+                var remainder = index % ColCount;//余数
+
+                StringBuilder td = new StringBuilder();
+                if (item.Group.IsNotNullOrWhiteSpace())
+                {
+                    var groupIndex = 0;
+
+                    foreach (var groupItem in _formItems.Where(x => x.Group == item.Group))
+                    {
+                        var itemContent = await RenderInnerTagHelper(groupItem, context, CreateTagHelperOutput(), false);
+                        var doc = new HtmlParser().ParseDocument($"<table><tr>{itemContent}</tr></table>");
+                        var items = doc.QuerySelectorAll("td");
+
+                        if (groupIndex == 0)
+                        {
+                            td.Append(items[0].OuterHtml);
+                            td.Append($"<td {(groupItem.ColSpan.HasValue ? $"colspan='{groupItem.ColSpan}'" : "")}>");
+                        }
+
+                        td.Append($"{groupItem.Before}{items[1].InnerHtml}{groupItem.After}");
+                        _item.Add(groupItem.Field);
+
+                        groupIndex++;
+                    }
+                    td.Append("</td>");
+                }
+                else
+                    td.Append(await RenderInnerTagHelper(item, context, CreateTagHelperOutput(), false));
+
+
+                if (item.ColSpan.HasValue)
+                {
+                    var itemColCount = (item.ColSpan + 1) / ColCount;
+
+                    if (itemColCount >= (remainder == 0 ? ColCount : remainder))
+                    {
+                        table.Append($"<tr>{td}</tr>");
+                        index += itemColCount.Value + remainder;
+                        continue;
+                    }
+                }
+
+                if (index % ColCount == 1)
+                {
+                    table.Append("<tr>");
+                }
+
+                table.Append(td);
+
+                if (index > 0 && remainder == 0 || _formItems.Count == 1)
+                {
+                    table.Append("</tr>");
+                }
+            }
+
+            foreach (var textArea in _textAreas)
+            {
+                textArea.ColSpan = ColSpan;
+                textArea.Height = RemarkHeight;
+                textArea.MinWidth = "200px";
+                var remarkContent = await RenderInnerTagHelper(textArea, context, CreateTagHelperOutput(), false);
+                table.Append($"<tr>{remarkContent}</tr>");
+            }
+            #endregion
+
+            table.Append("</table>");
+
+            foreach (var hideItem in _hideItems)
+            {
+                table.Append($"<input name=\"{hideItem.ToCamelCase()}\" hidden=\"hidden\" />");
+            }
+
+            output.Content.SetHtmlContent(table.ToString());
+
+            await base.ProcessAsync(context, output);
+
         }
 
         private void CreateFormItem()
         {
-            var remarkName = nameof(IHasRemark.Remark);
-            var index = 0;
-            foreach (var property in ModelTagHelper.PropertyInfos)
+            if (ModelTagHelper.HasModel)
             {
-                var name = property.Name;
-                var isId = name == nameof(WebConsts.Id);
-                var propertyType = property.PropertyType;
-                if (property.IsDefined(typeof(NotFormItemAttribute), false))
-                    continue;
-                var isFileType = propertyType == typeof(IFormFile);
-                if (!propertyType.IsValueType() && !isFileType)
-                    continue;
-                if (isId && !HasId)
+                var remarkName = nameof(IHasRemark.Remark);
+                var index = 0;
+                foreach (var property in ModelTagHelper.PropertyInfos)
                 {
-                    continue;
-                }
-                if (property.IsDefined(typeof(HideFormItemAttribute), false) || isId)
-                {
-                    _hideItems.Add(property.Name);
-                    continue;
-                }
-
-                var attributes = property.GetCustomAttributes(true);
-                var itemAttr = GetAttribute<FormItemAttribute>(attributes);
-
-                if (name == remarkName && ModelTagHelper.IsRemarkType)
-                {
-                    var remarkTag = new TextboxTagHelper();
-                    remarkTag.IsMultiline = true;
-                    remarkTag.MaxLength = DomainConsts.MaxDescLength;
-
-                    var textAreaTag = CreateItemTag(remarkName, WebConsts.DisplayName_Remark, remarkTag);
-
-                    textAreaTag.Width = itemAttr == null || itemAttr.Width.IsNullOrWhiteSpace() ? "100%" : itemAttr.Width;
-                    _textAreas.Add(textAreaTag);
-
-                    continue;
-                }
-
-                index++;
-
-
-                var valueType = propertyType.GetValueType();
-                var isNullType = propertyType.IsNullableType();
-                var isEnum = valueType.IsEnum;
-                var isValueType = propertyType.IsValueType && !isNullType;
-                var isName = ModelTagHelper.IsNameType && name == nameof(IHasName.Name);
-                var isDisable = GetAttribute<DisableAttribute>(attributes) != null || !property.CanWrite;
-                var colNameAttr = GetAttribute<DisplayNameAttribute>(attributes);
-                var requiredAttr = GetAttribute<RequiredAttribute>(attributes);
-                var comboboxAttr = GetAttribute<ComboboxAttribute>(attributes);
-
-                var isCombo = comboboxAttr != null || propertyType == typeof(bool) || propertyType == typeof(bool?) || valueType.IsEnum;
-                var colName = colNameAttr == null ? name : colNameAttr.DisplayName;
-
-
-                if (name == colName)
-                {
-                    if (isFileType)
-                        colName = "文件";
-                    else if (isEnum)
-                        colName = valueType.GetDescription();
-                    else
+                    var name = property.Name;
+                    var isId = name == nameof(WebConsts.Id);
+                    var propertyType = property.PropertyType;
+                    if (property.IsDefined(typeof(NotFormItemAttribute), false))
+                        continue;
+                    var isFileType = propertyType == typeof(IFormFile);
+                    if (!propertyType.IsValueType() && !isFileType)
+                        continue;
+                    if (isId && !HasId)
                     {
-                        switch (name)
-                        {
-                            case nameof(IHasRemark.Remark):
-                                colName = WebConsts.DisplayName_Remark;
-                                break;
-                            case nameof(IHasName.Name):
-                                colName = WebConsts.DisplayName_Name;
-                                break;
-                            case nameof(WebConsts.IsActive):
-                                colName = WebConsts.IsAble_Name;
-                                break;
-                            case nameof(IHasSort.Sort):
-                                colName = WebConsts.Sort_Name;
-                                break;
-                            case nameof(WebConsts.Id):
-                                colName = IdName;
-                                break;
-                            default:
-                                if (valueType.IsEnum)
-                                    colName = valueType.GetDisplayName();
-                                break;
-                        }
+                        continue;
                     }
-                }
-
-                var isTextArea = false;
-                var isRequired = isId || (isName && !IsSearch) || isValueType || requiredAttr != null;
-                int maxLength = DomainConsts.DefaultStringLength;
-
-                TextboxTagHelper itemTag = null;
-
-
-
-                if (isCombo)
-                {
-                    var defaultValueAttr = GetAttribute<DefaultValueAttribute>(attributes);
-                    var defaultIndexAttr = GetAttribute<DefaultIndexAttribute>(attributes);
-
-
-                    var tag = new ComboboxTagHelper
+                    if (property.IsDefined(typeof(HideFormItemAttribute), false) || isId && !HasId)
                     {
-                        DefaultValue = defaultValueAttr?.Value,
-                        DefaultIndex = defaultIndexAttr?.Index
-                    };
-
-                    if (isEnum)
-                    {
-                        tag.ModelType = valueType;
+                        _hideItems.Add(property.Name);
+                        continue;
                     }
-                    else if (comboboxAttr != null)
-                    {
-                        if (comboboxAttr.IsLoadData)
-                        {
-                            tag.ModelType = comboboxAttr.Type;
 
-                            var comboAttr = GetAttribute<ComboboxAttribute>(attributes);
-                            if (comboAttr?.WhereField.IsNotNullOrWhiteSpace() == true)
+                    var attributes = property.GetCustomAttributes(true);
+                    var itemAttr = GetAttribute<FormItemAttribute>(attributes);
+
+                    if (name == remarkName && ModelTagHelper.IsRemarkType)
+                    {
+                        var remarkTag = new TextboxTagHelper();
+                        remarkTag.IsMultiline = true;
+                        remarkTag.MaxLength = DomainConsts.MaxDescLength;
+
+                        var textAreaTag = CreateItemTag(remarkName, WebConsts.DisplayName_Remark, remarkTag);
+
+                        textAreaTag.Width = itemAttr == null || itemAttr.Width.IsNullOrWhiteSpace() ? "100%" : itemAttr.Width;
+                        _textAreas.Add(textAreaTag);
+
+                        continue;
+                    }
+
+                    index++;
+
+
+                    var valueType = propertyType.GetValueType();
+                    var isNullType = propertyType.IsNullableType();
+                    var isEnum = valueType.IsEnum;
+                    var isValueType = propertyType.IsValueType && !isNullType;
+                    var isName = ModelTagHelper.IsNameType && name == nameof(IHasName.Name);
+                    var isDisable = GetAttribute<DisableAttribute>(attributes) != null || !property.CanWrite;
+                    var colNameAttr = GetAttribute<DisplayNameAttribute>(attributes);
+                    var requiredAttr = GetAttribute<RequiredAttribute>(attributes);
+                    var comboboxAttr = GetAttribute<ComboboxAttribute>(attributes);
+
+                    var isCombo = comboboxAttr != null || propertyType == typeof(bool) || propertyType == typeof(bool?) || valueType.IsEnum;
+                    var colName = colNameAttr == null ? name : colNameAttr.DisplayName;
+
+
+                    if (name == colName)
+                    {
+                        if (isFileType)
+                            colName = "文件";
+                        else if (isEnum)
+                            colName = valueType.GetDescription();
+                        else
+                        {
+                            switch (name)
                             {
-                                tag.WhereField = comboAttr.WhereField;
-                                tag.WhereValue = comboAttr.WhereValue;
-                                tag.WhereOper = comboAttr.WhereOper;
+                                case nameof(IHasRemark.Remark):
+                                    colName = WebConsts.DisplayName_Remark;
+                                    break;
+                                case nameof(IHasName.Name):
+                                    colName = WebConsts.DisplayName_Name;
+                                    break;
+                                case nameof(WebConsts.IsActive):
+                                    colName = WebConsts.IsAble_Name;
+                                    break;
+                                case nameof(IHasSort.Sort):
+                                    colName = WebConsts.Sort_Name;
+                                    break;
+                                case nameof(WebConsts.Id):
+                                    colName = IdName;
+                                    break;
+                                default:
+                                    if (valueType.IsEnum)
+                                        colName = valueType.GetDisplayName();
+                                    break;
                             }
                         }
+                    }
 
-                        if (colNameAttr == null && comboboxAttr.DisplayName != null)
+                    var isTextArea = false;
+                    var isRequired = isId || (isName && !IsSearch) || isValueType || requiredAttr != null;
+                    int maxLength = DomainConsts.DefaultStringLength;
+
+                    TextboxTagHelper itemTag = null;
+
+
+
+                    if (isCombo)
+                    {
+                        var defaultValueAttr = GetAttribute<DefaultValueAttribute>(attributes);
+                        var defaultIndexAttr = GetAttribute<DefaultIndexAttribute>(attributes);
+
+
+                        var tag = new ComboboxTagHelper
                         {
-                            colName = comboboxAttr.DisplayName;
+                            DefaultValue = defaultValueAttr?.Value,
+                            DefaultIndex = defaultIndexAttr?.Index
+                        };
+
+                        if (isEnum)
+                        {
+                            tag.ModelType = valueType;
                         }
-                    }
-                    else if (valueType == typeof(bool))
-                    {
-                        tag.Class.Add("boolCombobox");
-                    }
+                        else if (comboboxAttr != null)
+                        {
+                            if (comboboxAttr.IsLoadData)
+                            {
+                                tag.ModelType = comboboxAttr.Type;
 
-                    itemTag = tag;
-                }
-                else if (propertyType.IsNumberType())
-                {
-                    var precisionAttr = GetAttribute<NumberFormatAttribute>(attributes);
-                    itemTag = new NumberboxTagHelper
+                                var comboAttr = GetAttribute<ComboboxAttribute>(attributes);
+
+
+                                if (comboAttr != null)
+                                {
+                                    if (comboAttr.WhereField.IsNotNullOrWhiteSpace())
+                                    {
+                                        tag.WhereField = comboAttr.WhereField;
+                                        tag.WhereValue = comboAttr.WhereValue;
+                                        tag.WhereOper = comboAttr.WhereOper;
+                                    }
+
+                                    tag.IsEdit = !comboAttr.IsReadOnly;
+                                }
+                            }
+
+                            if (colNameAttr == null && comboboxAttr.DisplayName != null)
+                            {
+                                colName = comboboxAttr.DisplayName;
+                            }
+                        }
+                        else if (valueType == typeof(bool))
+                        {
+                            tag.Class.Add("boolCombobox");
+                        }
+
+                        itemTag = tag;
+                    }
+                    else if (propertyType.IsNumberType())
                     {
-                        Precision = precisionAttr?.Precision
-                    };
-                }
-                else if (valueType == typeof(DateTime))
-                {
-                    var datetimeAttr = GetAttribute<DateFormatAttribute>(attributes);
-                    if (datetimeAttr == null)
-                        itemTag = new DateboxTagHelper();
+                        var precisionAttr = GetAttribute<NumberFormatAttribute>(attributes);
+                        itemTag = new NumberboxTagHelper
+                        {
+                            Precision = precisionAttr?.Precision
+                        };
+                    }
+                    else if (valueType == typeof(DateTime))
+                    {
+                        var datetimeAttr = GetAttribute<DateFormatAttribute>(attributes);
+                        if (datetimeAttr == null)
+                            itemTag = new DateboxTagHelper();
+                        else
+                            itemTag = new DateTimeboxTagHelper();
+                    }
+                    else if (isFileType)
+                    {
+                        itemTag = new FileTagHelper();
+                    }
                     else
-                        itemTag = new DateTimeboxTagHelper();
-                }
-                else if (isFileType)
-                {
-                    itemTag = new FileTagHelper();
-                }
-                else
-                {
-                    var maxLengthAttr = GetAttribute<MaxLengthAttribute>(attributes);
-                    isTextArea = GetAttribute<TextAreaAttribute>(attributes) != null;
-
-                    var tag = new TextboxTagHelper();
-                    if (maxLengthAttr != null)
-                        maxLength = maxLengthAttr.Length;
-
-                    var stringLength = GetAttribute<StringLengthAttribute>(attributes)?.MaximumLength;
-                    if (stringLength.HasValue)
                     {
-                        maxLength = stringLength.Value;
+                        var maxLengthAttr = GetAttribute<MaxLengthAttribute>(attributes);
+                        isTextArea = GetAttribute<TextAreaAttribute>(attributes) != null;
+
+                        var tag = new TextboxTagHelper();
+                        if (maxLengthAttr != null)
+                            maxLength = maxLengthAttr.Length;
+
+                        var stringLength = GetAttribute<StringLengthAttribute>(attributes)?.MaximumLength;
+                        if (stringLength.HasValue)
+                        {
+                            maxLength = stringLength.Value;
+                        }
+
+                        var isEmail = GetAttribute<EmailAddressAttribute>(attributes) != null;
+                        if (isEmail)
+                        {
+                            tag.ValidTypes.Add("email");
+                        }
+
+                        var isIdCard = GetAttribute<IdCardAttribute>(attributes) != null;
+                        if (isIdCard)
+                        {
+                            tag.ValidTypes.Add("idCard");
+                        }
+
+                        var isPhone = GetAttribute<PhoneAttribute>(attributes) != null || GetAttribute<PhoneNumberAttribute>(attributes) != null;
+                        if (isPhone)
+                        {
+                            tag.ValidTypes.Add("phone");
+                        }
+
+                        var isMobilePhone = GetAttribute<MobilePhoneAttribute>(attributes) != null;
+                        if (isMobilePhone)
+                        {
+                            tag.ValidTypes.Add("mobile");
+                        }
+
+                        if (isTextArea)
+                        {
+                            tag.IsMultiline = true;
+                            if (maxLengthAttr == null)
+                                maxLength = DomainConsts.MaxDescLength;
+                        }
+
+                        itemTag = tag;
                     }
 
-                    var isEmail = GetAttribute<EmailAddressAttribute>(attributes) != null;
-                    if (isEmail)
+
+
+                    if (isDisable)
                     {
-                        tag.ValidTypes.Add("email");
+                        itemTag.IsDisable = isDisable;
                     }
 
-                    var isIdCard = GetAttribute<IdCardAttribute>(attributes) != null;
-                    if (isIdCard)
-                    {
-                        tag.ValidTypes.Add("idCard");
-                    }
+                    itemTag.IsRequired = isRequired;
+                    itemTag.MaxLength = maxLength;
 
-                    var isPhone = GetAttribute<PhoneAttribute>(attributes) != null || GetAttribute<PhoneNumberAttribute>(attributes) != null;
-                    if (isPhone)
-                    {
-                        tag.ValidTypes.Add("phone");
-                    }
-
-                    var isMobilePhone = GetAttribute<MobilePhoneAttribute>(attributes) != null;
-                    if (isMobilePhone)
-                    {
-                        tag.ValidTypes.Add("mobile");
-                    }
+                    FormItemTagHelper formItem;
 
                     if (isTextArea)
                     {
-                        tag.IsMultiline = true;
-                        if (maxLengthAttr == null)
-                            maxLength = DomainConsts.MaxDescLength;
+                        formItem = CreateItemTag(name, colName, itemTag, index);
+                        _textAreas.Add(formItem);
+                    }
+                    else
+                    {
+                        formItem = CreateItemTag(name, colName, itemTag, isId ? 0 : index);
+                        _formItems.Add(formItem);
                     }
 
-                    itemTag = tag;
-                }
 
-
-
-                if (isDisable)
-                {
-                    itemTag.IsDisable = isDisable;
-                }
-
-                itemTag.IsRequired = isRequired;
-                itemTag.MaxLength = maxLength;
-
-                FormItemTagHelper formItem;
-
-                if (isTextArea)
-                {
-                    formItem = CreateItemTag(name, colName, itemTag, index);
-                    _textAreas.Add(formItem);
-                }
-                else
-                {
-                    formItem = CreateItemTag(name, colName, itemTag, isId ? 0 : index);
-                    _formItems.Add(formItem);
-                }
-
-
-                if (itemAttr != null)
-                {
-                    if (itemAttr.After.IsNotNullOrWhiteSpace())
-                        formItem.After = itemAttr.After;
-                    if (itemAttr.Before.IsNotNullOrWhiteSpace())
-                        formItem.Before = itemAttr.Before;
-                    if (itemAttr.ColSpan.HasValue)
-                        formItem.ColSpan = itemAttr.ColSpan;
-                    if (itemAttr.Group.IsNotNullOrWhiteSpace())
-                        formItem.Group = itemAttr.Group;
-                    if (itemAttr.Width.IsNotNullOrWhiteSpace())
-                        formItem.Width = itemAttr.Width;
+                    if (itemAttr != null)
+                    {
+                        if (itemAttr.After.IsNotNullOrWhiteSpace())
+                            formItem.After = itemAttr.After;
+                        if (itemAttr.Before.IsNotNullOrWhiteSpace())
+                            formItem.Before = itemAttr.Before;
+                        if (itemAttr.ColSpan.HasValue)
+                            formItem.ColSpan = itemAttr.ColSpan;
+                        if (itemAttr.Group.IsNotNullOrWhiteSpace())
+                            formItem.Group = itemAttr.Group;
+                        if (itemAttr.Width.IsNotNullOrWhiteSpace())
+                            formItem.Width = itemAttr.Width;
+                    }
                 }
             }
         }

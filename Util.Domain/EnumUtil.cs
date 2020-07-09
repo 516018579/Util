@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -106,7 +107,7 @@ namespace Util.Domain
             return GetEnumValueList(enumType);
         }
 
-        public static IReadOnlyDictionary<int, string> GetEnumValueList(Type enumType)
+        public static IReadOnlyDictionary<int, string> GetEnumValueList(Type enumType, Func<object, string> getTextFunc = null)
         {
             if (!enumType.IsEnum)
             {
@@ -114,7 +115,7 @@ namespace Util.Domain
             }
             var list = _concurrentDictionary.GetOrAdd(enumType,
                 _ => (from object enumValue in Enum.GetValues(enumType)
-                      let text = enumValue.GetType()
+                      let text = getTextFunc != null ? getTextFunc(enumValue) : enumValue.GetType()
                           .GetField(enumValue.ToString())
                           .GetDescription()
                       let value = Convert.ToInt32(enumValue)
@@ -186,6 +187,16 @@ namespace Util.Domain
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// 获取DayOfWeek的当前语言的名称list
+        /// </summary>
+        /// <returns></returns>
+        public static IReadOnlyDictionary<int, string> GetDayOfWeekList(CultureInfo cultureInfo = null)
+        {
+            return GetEnumValueList(typeof(DayOfWeek),
+                 value => (cultureInfo ?? CultureInfo.CurrentCulture).DateTimeFormat.GetDayName((DayOfWeek)value));
         }
     }
 }

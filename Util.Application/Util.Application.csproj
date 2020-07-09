@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>Util.Application</PackageId>
-    <Version>1.0.6</Version>
+    <Version>1.0.10</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Util.Domain" Version="1.0.6" />
+    <PackageReference Include="Util.Domain" Version="1.0.7" />
   </ItemGroup>
 
 </Project>

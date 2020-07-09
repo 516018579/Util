@@ -73,12 +73,11 @@ namespace Util.Web.TagHelpers.Easyui
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            var table = new StringBuilder();
+
+            DefaultWidth = DefaultWidth ?? 200;
             if (ModelTagHelper.HasModel)
             {
-                var table = new StringBuilder();
-
-                DefaultWidth = DefaultWidth ?? 200;
-
                 foreach (var property in ModelTagHelper.PropertyInfos)
                 {
                     var isId = property.Name == WebConsts.Id;
@@ -187,97 +186,112 @@ namespace Util.Web.TagHelpers.Easyui
 
                     _cols.Add(col);
                     col.Sort = isId ? 0 : ColCount;
-                }
 
-                var childHtml = (await output.GetChildContentAsync()).GetContent();
-                if (childHtml.IsNotNullOrWhiteSpace())
-                {
-                    var split = "</th>";
-
-                    var childs = HtmlTrim(childHtml).Split(split, StringSplitOptions.RemoveEmptyEntries);
-
-                    foreach (var child in childs)
+                    var itemAttr = property.GetCustomAttribute<GridItemAttribute>();
+                    if (itemAttr != null)
                     {
-                        var itemTag = DataGrodColumnTagHelper.Create(child + split);
-                        if (itemTag.ReplaceField.IsNotNullOrWhiteSpace())
-                        {
-                            var replaceTag = _cols.FirstOrDefault(x => x.Field.Equals(itemTag.ReplaceField, StringComparison.CurrentCultureIgnoreCase));
-                            if (replaceTag != null)
-                            {
-                                itemTag.Field = replaceTag.Field;
-                                if (itemTag.Title.IsNullOrWhiteSpace())
-                                    itemTag.Title = replaceTag.Title;
-                                if (!itemTag.Sort.HasValue)
-                                    itemTag.Sort = replaceTag.Sort;
-                                if (itemTag.Editor.IsNullOrWhiteSpace())
-                                {
-                                    itemTag.Editor = replaceTag.Editor;
-                                }
-                                if (itemTag.Formatter.IsNullOrWhiteSpace())
-                                {
-                                    itemTag.Formatter = replaceTag.Formatter;
-                                }
-                                if (itemTag.Styler.IsNullOrWhiteSpace())
-                                {
-                                    itemTag.Styler = replaceTag.Styler;
-                                }
-                                if (itemTag.Width == 0)
-                                {
-                                    itemTag.Width = replaceTag.Width;
-                                }
+                        if (itemAttr.Sort.HasValue)
+                            col.Sort = itemAttr.Sort;
 
-                                _cols.Remove(replaceTag);
-                            }
-                        }
+                        if (itemAttr.Editor.IsNotNullOrWhiteSpace())
+                            col.Editor = itemAttr.Editor;
 
-                        _cols.Add(itemTag);
+                        if (itemAttr.Formatter.IsNotNullOrWhiteSpace())
+                            col.Formatter = itemAttr.Formatter;
+
+                        if (itemAttr.Width.IsNotNullOrWhiteSpace())
+                            col.Width = itemAttr.Width;
                     }
                 }
-
-                if (!FitColumns.HasValue)
-                {
-                    if (ColCount < FitColCount)
-                    {
-                        FitColumns = true;
-                    }
-                    else
-                    {
-                        FitColumns = FitColCount > ColCount;
-                    }
-                }
-
-
-                Options.Add(EasyuiConsts.FitColumns, FitColumns);
-
-                var checkBox = "<th data-options=\"field:'_ck',checkbox: true\"></th>";
-
-                var frozenCols = _cols.Where(x => x.IsFrozen).ToList();
-
-                async Task AddHead(List<DataGrodColumnTagHelper> cols, bool isFrozen = false)
-                {
-                    table.Append($"<thead {(isFrozen ? "data-options='frozen: true'" : "")}>");
-                    if (HasCheckBox && (isFrozen || (!isFrozen && !frozenCols.Any())))
-                        table.Append(checkBox);
-
-                    foreach (var col in cols.OrderBy(x => x.Sort))
-                    {
-                        if (!col.IsEdit)
-                            col.Editor = null;
-                        table.Append(await RenderInnerTagHelper(col, context, CreateTagHelperOutput()));
-                    }
-
-                    table.Append("</thead>");
-                }
-
-                if (frozenCols.Any())
-                {
-                    await AddHead(frozenCols, true);
-                }
-
-                await AddHead(_cols.Where(x => !x.IsFrozen).ToList());
-
-                output.Content.SetHtmlContent(table.ToString());
             }
+            var childHtml = (await output.GetChildContentAsync()).GetContent();
+            if (childHtml.IsNotNullOrWhiteSpace())
+            {
+                var split = "</th>";
+
+                var childs = HtmlTrim(childHtml).Split(split, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var child in childs)
+                {
+                    var itemTag = DataGrodColumnTagHelper.Create(child + split);
+                    if (itemTag.ReplaceField.IsNotNullOrWhiteSpace())
+                    {
+                        var replaceTag = _cols.FirstOrDefault(x => x.Field.Equals(itemTag.ReplaceField, StringComparison.CurrentCultureIgnoreCase));
+                        if (replaceTag != null)
+                        {
+                            itemTag.Field = replaceTag.Field;
+                            if (itemTag.Title.IsNullOrWhiteSpace())
+                                itemTag.Title = replaceTag.Title;
+                            if (!itemTag.Sort.HasValue)
+                                itemTag.Sort = replaceTag.Sort;
+                            if (itemTag.Editor.IsNullOrWhiteSpace())
+                            {
+                                itemTag.Editor = replaceTag.Editor;
+                            }
+                            if (itemTag.Formatter.IsNullOrWhiteSpace())
+                            {
+                                itemTag.Formatter = replaceTag.Formatter;
+                            }
+                            if (itemTag.Styler.IsNullOrWhiteSpace())
+                            {
+                                itemTag.Styler = replaceTag.Styler;
+                            }
+                            if (itemTag.Width == (object)0)
+                            {
+                                itemTag.Width = replaceTag.Width;
+                            }
+
+                            _cols.Remove(replaceTag);
+                        }
+                    }
+
+                    _cols.Add(itemTag);
+                }
+            }
+
+            if (!FitColumns.HasValue)
+            {
+                if (ColCount < FitColCount)
+                {
+                    FitColumns = true;
+                }
+                else
+                {
+                    FitColumns = FitColCount > ColCount;
+                }
+            }
+
+            Options.Add(EasyuiConsts.FitColumns, FitColumns);
+
+            var checkBox = "<th data-options=\"field:'_ck',checkbox: true\"></th>";
+
+            var frozenCols = _cols.Where(x => x.IsFrozen).ToList();
+
+            async Task AddHead(List<DataGrodColumnTagHelper> cols, bool isFrozen = false)
+            {
+                table.Append($"<thead {(isFrozen ? "data-options='frozen: true'" : "")}>");
+                if (HasCheckBox && (isFrozen || (!isFrozen && !frozenCols.Any())))
+                    table.Append(checkBox);
+
+                foreach (var col in cols.OrderBy(x => x.Sort))
+                {
+                    if (!col.IsEdit)
+                        col.Editor = null;
+                    table.Append(await RenderInnerTagHelper(col, context, CreateTagHelperOutput()));
+                }
+
+                table.Append("</thead>");
+            }
+
+            if (frozenCols.Any())
+            {
+                await AddHead(frozenCols, true);
+            }
+
+            await AddHead(_cols.Where(x => !x.IsFrozen).ToList());
+
+            output.Content.SetHtmlContent(table.ToString());
+
             await base.ProcessAsync(context, output);
         }
     }

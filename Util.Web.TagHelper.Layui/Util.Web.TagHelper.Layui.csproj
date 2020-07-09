@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Util.Json" Version="1.0.2" />
-    <PackageReference Include="Util.Web.TagHelper" Version="1.0.22" />
+    <PackageReference Include="Util.Json" Version="1.0.4" />
+    <PackageReference Include="Util.Web.TagHelper" Version="1.0.25" />
   </ItemGroup>
 
 </Project>

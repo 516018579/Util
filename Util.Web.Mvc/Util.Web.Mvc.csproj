@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -7,8 +7,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
-    <PackageReference Include="Util.Domain" Version="1.0.6" />
-    <PackageReference Include="Util.Json" Version="1.0.2" />
+    <PackageReference Include="Util.Domain" Version="1.0.7" />
+    <PackageReference Include="Util.Json" Version="1.0.4" />
   </ItemGroup>
 
 </Project>
