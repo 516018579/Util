@@ -157,7 +157,7 @@ namespace Util.Web.TagHelpers.Easyui
 
             foreach (var hideItem in _hideItems)
             {
-                table.Append($"<input name=\"{hideItem.ToCamelCase()}\" hidden=\"hidden\" />");
+                table.Append($"<input name=\"{hideItem.ToCamelCase()}\" type=\"hidden\" />");
             }
 
             output.Content.SetHtmlContent(table.ToString());
@@ -439,7 +439,7 @@ namespace Util.Web.TagHelpers.Easyui
             tag.Title = itemTitle;
             tag.Sort = itemSort;
             tag.ContentTag = contentTag;
-            if (ItemWidth.HasValue && !tag.ColSpan.HasValue)
+            if (ItemWidth.HasValue && !tag.ColSpan.HasValue && contentTag.IsMultiline != true)
             {
                 tag.Width = $"{ItemWidth}px";
             }

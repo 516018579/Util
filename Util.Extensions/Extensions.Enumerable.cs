@@ -104,5 +104,33 @@ namespace Util.Extensions
                 source.Remove(item);
             }
         }
+
+        /// <summary>
+        /// 获取最大值, 没有是返回默认值
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public static TResult MaxOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector)
+        {
+            var enumerable = source.ToList();
+            return enumerable.Any() ? enumerable.Max(selector) : default;
+        }
+
+        /// <summary>
+        /// 获取最值, 没有是返回默认值
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public static TResult MinOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector)
+        {
+            var enumerable = source.ToList();
+            return enumerable.Any() ? enumerable.Min(selector) : default;
+        }
     }
 }

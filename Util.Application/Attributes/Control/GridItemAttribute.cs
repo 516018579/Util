@@ -9,7 +9,7 @@ namespace Util.Application.Attributes.Control
         {
         }
 
-        public GridItemAttribute(int sort, int rowSpan = 1, int colSpan = 1, string width = null, string align = null, string halign = null, string formatter = null, string editor = null)
+        public GridItemAttribute(int sort = 0, int rowSpan = 1, int colSpan = 1, string width = null, string align = null, string halign = null, string formatter = null, string editor = null, bool isEdit = false)
         {
             RowSpan = rowSpan;
             ColSpan = colSpan;
@@ -19,6 +19,7 @@ namespace Util.Application.Attributes.Control
             Formatter = formatter;
             Editor = editor;
             Sort = sort;
+            IsEdit = isEdit;
         }
 
         public int RowSpan { get; set; }
@@ -28,6 +29,7 @@ namespace Util.Application.Attributes.Control
         public string Halign { get; set; }
         public string Formatter { get; set; }
         public string Editor { get; set; }
+        public bool IsEdit { get; set; }
         public int? Sort { get; set; }
     }
 }

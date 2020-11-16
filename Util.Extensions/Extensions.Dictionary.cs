@@ -16,7 +16,7 @@ namespace Util.Extensions
         /// <param name="dictionary"></param>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public static void AddOrUpdate<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
+        public static void AddOrUpdate<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value = default)
         {
             if (dictionary.ContainsKey(key))
             {
@@ -25,6 +25,18 @@ namespace Util.Extensions
             else
             {
                 dictionary.Add(key, value);
+            }
+        }
+
+        public static void AddOrUpdate<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TValue, TValue> updateFunc)
+        {
+            if (dictionary.ContainsKey(key))
+            {
+                dictionary[key] = updateFunc(dictionary[key]);
+            }
+            else
+            {
+                dictionary.Add(key, updateFunc(default));
             }
         }
 

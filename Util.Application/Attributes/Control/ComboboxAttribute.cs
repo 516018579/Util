@@ -13,26 +13,32 @@ namespace Util.Application.Attributes.Control
             IsLoadData = false;
         }
 
-        public ComboboxAttribute(Type type = null, bool isLoadData = true, string whereField = null, object whereValue = null, string whereOper = "=", bool isReadOnly = true)
+        public ComboboxAttribute(Type type = null, bool isLoadData = true, string whereField = null, object whereValue = null, string whereOper = "=", string displayField = null)
         {
             if (type != null)
             {
                 var attribute = type.GetCustomAttribute<DisplayNameAttribute>();
                 Type = type;
-                DisplayName = attribute == null ? type.Name : attribute.DisplayName;
+                if (displayField == null)
+                {
+                    DisplayName = attribute == null ? type.Name : attribute.DisplayName;
+                }
             }
-           
+
             IsLoadData = isLoadData;
             WhereField = whereField;
             WhereOper = whereOper;
             WhereValue = whereValue;
-            IsReadOnly = isReadOnly;
+            DisplayField = displayField;
         }
 
         public Type Type { get; set; }
         public bool IsLoadData { get; set; }
         public string DisplayName { get; set; }
-
+        /// <summary>
+        /// 显示字段名称
+        /// </summary>
+        public string DisplayField { get; set; }
         /// <summary>
         /// 查询条件字段
         /// </summary>
@@ -46,6 +52,6 @@ namespace Util.Application.Attributes.Control
         /// </summary>
         public object WhereValue { get; set; }
 
-        public bool IsReadOnly { get; set; } = true;
+        public bool? IsReadOnly { get; set; }
     }
 }

@@ -4,15 +4,15 @@ using System.Text;
 
 namespace Util.Application.Dto
 {
-    public class ValueText
+    public class LabelValue
     {
-        public ValueText(object value = null, string text = null)
+        public LabelValue(object value = null, string label = null)
         {
             Value = value;
-            Text = text;
+            Label = label;
         }
 
         public object Value { get; set; }
-        public string Text { get; set; }
+        public string Label { get; set; }
     }
 }

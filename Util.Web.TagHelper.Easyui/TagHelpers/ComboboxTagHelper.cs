@@ -51,6 +51,7 @@ namespace Util.Web.TagHelpers.Easyui
             }
             else
             {
+                IsEdit = true;
                 list = await TagHelperConfig.GetComboboxDataFunc(ModelType.Name, WhereField, WhereOper, WhereValue);
             }
 

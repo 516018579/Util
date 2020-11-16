@@ -43,5 +43,34 @@ namespace Util.Extensions
 
             return value;
         }
+
+        /// <summary>
+        /// 如果小于0则返回0, 否则返回自己
+        /// </summary>
+        public static double NegativeToZero(this double value)
+        {
+            return value < 0 ? 0 : value;
+        }
+        /// <summary>
+        /// 如果小于0则返回0, 否则返回自己
+        /// </summary>
+        public static decimal NegativeToZero(this decimal value)
+        {
+            return value < 0 ? 0 : value;
+        }
+        /// <summary>
+        /// 如果小于0则返回0, 否则返回自己
+        /// </summary>
+        public static int NegativeToZero(this int value)
+        {
+            return value < 0 ? 0 : value;
+        }
+        /// <summary>
+        /// 如果小于0则返回0, 否则返回自己
+        /// </summary>
+        public static float NegativeToZero(this float value)
+        {
+            return value < 0 ? 0 : value;
+        }
     }
 }

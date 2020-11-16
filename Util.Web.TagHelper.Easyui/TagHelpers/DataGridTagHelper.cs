@@ -130,17 +130,16 @@ namespace Util.Web.TagHelpers.Easyui
                             default:
                                 if (isEnum)
                                     name = valueType.GetDisplayName();
+                                if (name == property.PropertyType.Name)
+                                {
+                                    name = valueType.GetDescription();
+                                }
                                 break;
                         }
                     }
 
                     if (isEnum || isBool)
                     {
-                        if (name == property.Name)
-                        {
-                            name = valueType.GetDescription();
-                        }
-
                         string data;
                         if (isBool)
                         {

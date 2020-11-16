@@ -34,8 +34,10 @@ namespace Util.Json
         /// <param name="value">对象</param>
         /// <param name="hasQuoteName">是否包含引号</param>
         /// <param name="isCamelCase">是否采用CamelCase命名</param>
+        /// <param name="ignoreNull">是否忽略值为null的属性</param>
+        /// <param name="converters">自定义转换器</param>
         /// <returns></returns>
-        public static string ToJsonString<T>(this T value, bool hasQuoteName = false, bool isCamelCase = false) where T : class
+        public static string ToJsonString<T>(this T value, bool hasQuoteName = false, bool isCamelCase = false, bool ignoreNull = false, params JsonConverter[] converters) where T : class
         {
             string str = "null";
             if (value != null)
@@ -45,6 +47,18 @@ namespace Util.Json
                 if (isCamelCase)
                 {
                     jsonSerializer.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                }
+                if (ignoreNull)
+                {
+                    jsonSerializer.NullValueHandling = NullValueHandling.Ignore;
+                }
+
+                if (converters != null)
+                {
+                    foreach (var converter in converters)
+                    {
+                        jsonSerializer.Converters.Add(converter);
+                    }
                 }
 
                 var stringWriter = new StringWriter();

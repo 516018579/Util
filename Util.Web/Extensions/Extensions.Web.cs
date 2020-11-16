@@ -12,11 +12,16 @@ namespace Util.Web.Extensions
     public static class WebExtensions
     {
         #region IFormFile
-        public static Task SaveAsync(this IFormFile file, string path)
+        public static async Task SaveAsync(this IFormFile file, string path, string fileName)
         {
-            using (var fileStream = new FileStream(Path.Combine(WebConsts.WebRootPath, path), FileMode.Create))
+            path = Path.Combine(WebConsts.WebRootPath, path);
+            if (!Directory.Exists(path))
             {
-                return file.CopyToAsync(fileStream);
+                Directory.CreateDirectory(path);
+            }
+            using (var fileStream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
             }
         }
         #endregion

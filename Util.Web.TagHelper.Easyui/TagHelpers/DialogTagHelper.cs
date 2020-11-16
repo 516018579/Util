@@ -34,7 +34,7 @@ namespace Util.Web.TagHelpers.Easyui
 
             buttons.Append("]");
 
-            Options.AddIf(OnClose.IsNotNullOrWhiteSpace(), EasyuiConsts.Dialog_OnClose, $"function(){{ {OnClose} }}");
+            Options.AddIf(OnClose.IsNotNullOrWhiteSpace(), EasyuiConsts.Dialog_OnClose, GetJavaScriptString($"function(){{ {OnClose} }}"));
 
             Options.AddIf(IsMax, EasyuiConsts.Dialog_IsMax, IsMax);
 

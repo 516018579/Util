@@ -23,11 +23,16 @@ namespace Util.Extensions
             where T : struct
         {
             T value = defaultValue;
+
+            if (obj == null)
+            {
+                return defaultValue;
+            }
             try
             {
                 if (typeof(T) == typeof(Guid))
                 {
-                    value = (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFromInvariantString(obj.ToString());
+                    value = (T)(object)Guid.Parse(obj.ToString());
                 }
 
                 if (typeof(T).IsEnum)
@@ -58,6 +63,10 @@ namespace Util.Extensions
         public static T? ToNullable<T>(this object obj, T? defaultValue = default(T?))
             where T : struct
         {
+            if (obj == null)
+            {
+                return defaultValue;
+            }
             var value = defaultValue;
             try
             {
@@ -67,6 +76,16 @@ namespace Util.Extensions
             { }
 
             return value;
+        }
+
+        public static object GetPropertyValue<T>(this T obj, string propertyName) where T : class
+        {
+            return obj.GetType().GetProperty(propertyName)?.GetValue(obj, null);
+        }
+
+        public static void SetPropertyValue<T>(this T obj, string propertyName, object value) where T : class
+        {
+            obj.GetType().GetProperty(propertyName)?.SetValue(obj, value);
         }
     }
 }

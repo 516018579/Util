@@ -1,7 +1,17 @@
-﻿namespace Util.Web
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Util.Web
 {
     public class WebConsts
     {
+        /// <summary>
+        /// 获取下拉框数据方法
+        /// 属性名, 条件字段, 条件判断符, 条件值
+        /// </summary>
+        public static Func<string, string, string, dynamic, string, Task<Dictionary<object, string>>> GetComboboxDataFunc { get; set; }
+
         public static string WebRootPath { get; set; }
 
         public const string Id = "Id";
